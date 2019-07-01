@@ -19,6 +19,7 @@
  *
  */
 
+use oat\taoSyncServer\scripts\update\Updater;
 use oat\taoSync\model\SyncService;
 
 /**
@@ -38,6 +39,7 @@ return [
     ],
     'install' => [],
     'uninstall' => [],
+    'update' => Updater::class,
     'routes' => [],
     'constants' => [
         # views directory
