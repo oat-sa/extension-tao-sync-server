@@ -13,14 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
 
-msgid "Hello World"
-msgstr ""
-
 #, tao-public
 msgid "Tao Sync Central Server"
-msgstr ""
-
-#, tao-public
-msgid "Template"
 msgstr ""
 
