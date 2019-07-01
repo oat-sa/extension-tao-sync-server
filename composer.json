@@ -1,6 +1,6 @@
 {
 
-    "name": "oat/taoSyncServer",
+    "name": "oat-sa/extension-tao-sync-server",
     "description" : "TAO central server for synchronisation.",
     "type" : "tao-extension",
     "authors" : [
