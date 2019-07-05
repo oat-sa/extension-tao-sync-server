@@ -30,7 +30,7 @@ return [
     'label' => 'Tao Sync Central Server',
     'description' => 'TAO central server for synchronisation.',
     'license' => 'GPL-2.0',
-    'version' => '0.0.1',
+    'version' => '0.1.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => [],
     'managementRole' => SyncService::TAO_SYNC_ROLE,
