@@ -29,7 +29,7 @@ use oat\taoSync\model\dataProvider\DataProviderCollection;
 
 class Export extends ConfigurableService
 {
-    const SERVICE_ID = 'taoSyncServer/Export';
+    const SERVICE_ID = 'taoSync/Export';
 
     const FILE_PREFIX = 'syncPackageServer';
 

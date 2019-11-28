@@ -32,14 +32,14 @@ class Eligibility extends AbstractDataReader
     /**
      * @inheritDoc
      */
-    public function getData(array $params)
+    public function getData(array $testCenter)
     {
-        if (!array_key_exists('id', $params)) {
+        if (!array_key_exists('id', $testCenter)) {
             throw new DataProviderException('Invalid data for Eligibility data provider');
         }
 
         $eligibility = $this->getClass(EligibilityService::CLASS_URI)->searchInstances(
-            [EligibilityService::PROPERTY_TESTCENTER_URI => $params['id']],
+            [EligibilityService::PROPERTY_TESTCENTER_URI => $testCenter['id']],
             ['recursive' => false, 'like' => false]
         );
 

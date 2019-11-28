@@ -42,7 +42,7 @@ class TestCenter extends AbstractDataProvider
      * @return array
      * @throws DataProviderException
      */
-    public function getData($params)
+    public function getResources(array $params)
     {
         if (!isset($params[self::PARAM_ORG_ID])) {
             throw new DataProviderException('Organisation id required');
@@ -57,10 +57,6 @@ class TestCenter extends AbstractDataProvider
             throw new DataProviderException(
                 sprintf('Multiply test centers for org ID %s', $params[self::PARAM_ORG_ID])
             );
-        }
-
-        if ($this->getDataFormatter()) {
-            $testCenters = $this->getDataFormatter()->formatAll($testCenters);
         }
 
         return $testCenters;

@@ -22,6 +22,7 @@
 namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 
 use core_kernel_classes_Resource;
+use oat\taoSync\export\dataProvider\dataFormatter\AbstractDataFormatter;
 
 class DefaultFormatter extends AbstractDataFormatter
 {

@@ -51,21 +51,13 @@ class ByTestCenter extends AbstractDataProvider
      * @return array
      * @throws DataProviderException
      */
-    public function getData($params)
+    public function getResources(array $params)
     {
         if (!array_key_exists(TestCenter::TYPE, $params) || !$params[TestCenter::TYPE]) {
             throw new DataProviderException('Required param test center is missing');
         }
 
-        $testCenter = current($params[TestCenter::TYPE]);
-
-        $data = $this->getDataReader()->getData($testCenter);
-
-        if ($this->getDataFormatter()) {
-            $data = $this->getDataFormatter()->formatAll($data);
-        }
-
-        return $data;
+        return $this->getDataReader()->getData(current($params[TestCenter::TYPE]));
     }
 
     /**

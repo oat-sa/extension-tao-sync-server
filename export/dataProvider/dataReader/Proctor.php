@@ -35,15 +35,15 @@ class Proctor extends AbstractDataReader
     /**
      * @inheritDoc
      */
-    public function getData(array $params)
+    public function getData(array $testCenter)
     {
-        if (!array_key_exists('id', $params)) {
+        if (!array_key_exists('id', $testCenter)) {
             throw new DataProviderException('Invalid  data for Proctor data provider');
         }
 
         $eligibility = $this->getClass(TaoOntology::CLASS_URI_TAO_USER)->searchInstances(
             [
-                ProctorManagementService::PROPERTY_ASSIGNED_PROCTOR_URI => $params['id'],
+                ProctorManagementService::PROPERTY_ASSIGNED_PROCTOR_URI => $testCenter['id'],
                 GenerisRdf::PROPERTY_USER_ROLES => ProctorService::ROLE_PROCTOR,
             ],
             ['recursive' => false, 'like' => false]

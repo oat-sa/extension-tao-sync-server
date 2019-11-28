@@ -25,7 +25,6 @@ use core_kernel_classes_Resource;
 use oat\generis\model\data\Ontology;
 use oat\taoLti\models\classes\ConsumerService;
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
-use oat\taoSyncServer\exception\DataProviderException;
 
 class LtiConsumers extends AbstractDataProvider
 {
@@ -39,20 +38,13 @@ class LtiConsumers extends AbstractDataProvider
     /**
      * @param array $params
      * @return array
-     * @throws DataProviderException
      */
-    public function getData($params)
+    public function getResources(array $params)
     {
-        $data = $this->getClass()->searchInstances(
+        return $this->getClass()->searchInstances(
             [],
             ['recursive' => false, 'like' => false]
         );
-
-        if ($this->getDataFormatter()) {
-            $data = $this->getDataFormatter()->formatAll($data);
-        }
-
-        return $data;
     }
 
     /**

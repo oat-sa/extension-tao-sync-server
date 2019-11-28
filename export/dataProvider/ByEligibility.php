@@ -52,18 +52,12 @@ class ByEligibility extends AbstractDataProvider
      * @return array
      * @throws DataProviderException
      */
-    public function getData($params)
+    public function getResources(array $params)
     {
         if (!array_key_exists(Eligibility::TYPE, $params)) {
             return [];
         }
-
-        $data = $this->getDataReader()->getData($params[Eligibility::TYPE]);
-
-        if ($this->getDataFormatter()) {
-            $data = $this->getDataFormatter()->formatAll($data);
-        }
-        return $data;
+        return $this->getDataReader()->getData($params[Eligibility::TYPE]);
     }
 
     /**
