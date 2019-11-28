@@ -18,12 +18,17 @@
  *
  */
 
-namespace oat\taoSync\taoSyncServer\update;
+namespace oat\taoSyncServer\update;
+
+use oat\taoSyncServer\install\RegisterServices;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
     public function update($initialVersion)
     {
-
+        if ($this->isVersion('0.1.0')) {
+            $this->runExtensionScript(RegisterServices::class);
+            $this->setVersion('0.2.0');
+        }
     }
 }
