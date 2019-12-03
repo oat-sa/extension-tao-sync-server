@@ -23,7 +23,7 @@ namespace oat\taoSyncServer\exception;
 
 use oat\taoSync\model\Exception\SyncBaseException;
 
-class BaseException extends SyncBaseException
+class SyncServerBaseException extends SyncBaseException
 {
 
 }

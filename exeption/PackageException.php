@@ -21,7 +21,7 @@
 
 namespace oat\taoSyncServer\exception;
 
-class PackageException extends BaseException
+class PackageException extends SyncServerBaseException
 {
 
 }

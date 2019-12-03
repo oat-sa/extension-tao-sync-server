@@ -21,7 +21,7 @@
 
 namespace oat\taoSyncServer\exception;
 
-class DataProviderException extends BaseException
+class DataProviderException extends SyncServerBaseException
 {
 
 }
