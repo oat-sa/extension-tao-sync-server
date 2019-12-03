@@ -16,7 +16,7 @@
  *
  * Copyright (c) 2019  (original work) Open Assessment Technologies SA;
  *
- * @author Oleksandr Zagovorychev <zagovorichev@gmail.com>
+ * @author Yuri Filippovich
  */
 
 namespace oat\taoSyncServer\exception;
