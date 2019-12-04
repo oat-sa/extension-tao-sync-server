@@ -24,7 +24,7 @@ namespace oat\taoSyncServer\export\dataProvider\dataReader;
 use oat\generis\model\GenerisRdf;
 use oat\tao\model\TaoOntology;
 use oat\taoSync\export\dataProvider\dataReader\AbstractDataReader;
-use oat\taoSyncServer\exception\DataProviderException;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoTestCenter\model\ProctorManagementService;
 use oat\taoTestCenter\model\TestCenterService;
 
@@ -38,7 +38,7 @@ class Administrator extends AbstractDataReader
     public function getData(array $testCenter)
     {
         if (!array_key_exists('id', $testCenter)) {
-            throw new DataProviderException('Invalid  data for Administrator data provider');
+            throw new SyncDataProviderException('Invalid  data for Administrator data provider');
         }
         $administrators = $this->getClass(TaoOntology::CLASS_URI_TAO_USER)->searchInstances(
             [

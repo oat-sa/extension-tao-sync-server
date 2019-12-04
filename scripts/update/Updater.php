@@ -20,14 +20,81 @@
 
 namespace oat\taoSyncServer\update;
 
-use oat\taoSyncServer\install\RegisterServices;
+use oat\tao\model\TaoOntology;
+use oat\taoDeliveryRdf\model\ContainerRuntime;
+use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
+use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
+use oat\taoSync\model\Entity;
+use oat\taoSyncServer\export\dataProvider\ByEligibility;
+use oat\taoSyncServer\export\dataProvider\ByTestCenter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
+use oat\taoSyncServer\export\dataProvider\dataReader\Administrator;
+use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
+use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
+use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
+use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
+use oat\taoSyncServer\export\dataProvider\LtiConsumers;
+use oat\taoSyncServer\export\dataProvider\TestCenter;
+use oat\taoSyncServer\export\service\ExportPackage;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
     public function update($initialVersion)
     {
         if ($this->isVersion('0.1.0')) {
-            $this->runExtensionScript(RegisterServices::class);
+            $defaultFormatterOptions =  [
+                RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
+                    TaoOntology::PROPERTY_UPDATED_AT,
+                    Entity::CREATED_AT
+                ]
+            ];
+
+            $providers = [
+                TestCenter::TYPE => new TestCenter([
+                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions),
+                ]),
+                Eligibility::TYPE => new ByTestCenter([
+                    ByTestCenter::OPTION_READER => new Eligibility(),
+                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ]),
+                Administrator::TYPE => new ByTestCenter([
+                    ByTestCenter::OPTION_READER => new Administrator(),
+                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ]),
+                Proctor::TYPE => new ByTestCenter([
+                    ByTestCenter::OPTION_READER => new Proctor(),
+                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ]),
+                TestTaker::TYPE => new ByEligibility([
+                    ByEligibility::OPTION_READER => new TestTaker(),
+                    ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ]),
+                Delivery::TYPE => new ByEligibility([
+                    ByEligibility::OPTION_READER => new Delivery(),
+                    ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+                        [
+                            RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
+                                TaoOntology::PROPERTY_UPDATED_AT,
+                                Entity::CREATED_AT,
+                                DeliveryAssemblyService::PROPERTY_ORIGIN,
+                                DeliveryAssemblyService::PROPERTY_DELIVERY_DIRECTORY,
+                                DeliveryAssemblyService::PROPERTY_DELIVERY_TIME,
+                                DeliveryAssemblyService::PROPERTY_DELIVERY_RUNTIME,
+                                ContainerRuntime::PROPERTY_CONTAINER,
+                            ]
+                        ]
+                    )
+                ]),
+                LtiConsumers::TYPE => new LtiConsumers([
+                    ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ]),
+            ];
+            $dataProviders = new SyncDataProviderCollection([
+                SyncDataProviderCollection::OPTION_DATA_PROVIDERS => $providers
+            ]);
+
+            $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
+            $this->getServiceManager()->register(ExportPackage::SERVICE_ID, new ExportPackage());
             $this->setVersion('0.2.0');
         }
     }

@@ -24,14 +24,23 @@ namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 use core_kernel_classes_Resource;
 use oat\taoSync\export\dataProvider\dataFormatter\AbstractDataFormatter;
 
-class DefaultFormatter extends AbstractDataFormatter
+class RdfDataFormatter extends AbstractDataFormatter
 {
     const OPTION_EXCLUDED_FIELDS = 'excluded-fields';
 
     /**
      * @inheritDoc
      */
-    public function format(core_kernel_classes_Resource $resource)
+    public function format($resource)
+    {
+        return $this->formatResource($resource);
+    }
+
+    /**
+     * @param core_kernel_classes_Resource $resource
+     * @return array
+     */
+    public function formatResource(core_kernel_classes_Resource $resource)
     {
         $properties = $this->filterProperties($resource->getRdfTriples()->toArray());
         $properties['id'] = $resource->getUri();

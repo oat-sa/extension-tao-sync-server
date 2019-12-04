@@ -23,7 +23,7 @@ namespace oat\taoSyncServer\export\dataProvider;
 
 use oat\taoSync\export\dataProvider\dataReader\AbstractDataReader;
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
-use oat\taoSyncServer\exception\DataProviderException;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
 
 class ByEligibility extends AbstractDataProvider
@@ -40,7 +40,7 @@ class ByEligibility extends AbstractDataProvider
 
     /**
      * @return string
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     public function getType()
     {
@@ -50,7 +50,7 @@ class ByEligibility extends AbstractDataProvider
     /**
      * @param array $params
      * @return array
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     public function getResources(array $params)
     {
@@ -62,14 +62,14 @@ class ByEligibility extends AbstractDataProvider
 
     /**
      * @return AbstractDataReader
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     protected function getDataReader()
     {
         $reader = $this->getOption(self::OPTION_READER);
 
         if (!$reader instanceof AbstractDataReader) {
-            throw new DataProviderException('Invalid data reader for ' . __CLASS__);
+            throw new SyncDataProviderException('Invalid data reader for ' . __CLASS__);
         }
 
         return $this->propagate($reader);

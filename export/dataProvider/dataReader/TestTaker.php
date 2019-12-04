@@ -22,7 +22,7 @@
 namespace oat\taoSyncServer\export\dataProvider\dataReader;
 
 use oat\taoSync\export\dataProvider\dataReader\AbstractDataReader;
-use oat\taoSyncServer\exception\DataProviderException;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoTestCenter\model\EligibilityService;
 
 class TestTaker extends AbstractDataReader
@@ -38,7 +38,7 @@ class TestTaker extends AbstractDataReader
         foreach ($eligibilityData as $eligibility) {
 
             if (!array_key_exists(EligibilityService::PROPERTY_TESTTAKER_URI, $eligibility)) {
-                throw new DataProviderException('Invalid eligibility data for testTaker data provider');
+                throw new SyncDataProviderException('Invalid eligibility data for testTaker data provider');
             }
             $testTakers[] = $this->getResource($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI]);
         }

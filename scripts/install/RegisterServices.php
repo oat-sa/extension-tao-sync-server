@@ -25,11 +25,11 @@ use oat\oatbox\extension\InstallAction;
 use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
-use oat\taoSync\model\dataProvider\DataProviderCollection;
+use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
-use oat\taoSyncServer\export\dataProvider\dataFormatter\DefaultFormatter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataReader\Administrator;
 use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
@@ -37,7 +37,7 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
 use oat\taoSyncServer\export\dataProvider\LtiConsumers;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
-use oat\taoSyncServer\export\service\Export;
+use oat\taoSyncServer\export\service\ExportPackage;
 use common_Exception;
 
 /**
@@ -55,7 +55,7 @@ class RegisterServices extends InstallAction
     public function __invoke($params)
     {
         $defaultFormatterOptions =  [
-            DefaultFormatter::OPTION_EXCLUDED_FIELDS => [
+            RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
                 TaoOntology::PROPERTY_UPDATED_AT,
                 Entity::CREATED_AT
             ]
@@ -63,29 +63,29 @@ class RegisterServices extends InstallAction
 
         $providers = [
             TestCenter::TYPE => new TestCenter([
-                ByTestCenter::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions),
+                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions),
             ]),
             Eligibility::TYPE => new ByTestCenter([
                 ByTestCenter::OPTION_READER => new Eligibility(),
-                ByTestCenter::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions)
+                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
             Administrator::TYPE => new ByTestCenter([
                 ByTestCenter::OPTION_READER => new Administrator(),
-                ByTestCenter::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions)
+                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
             Proctor::TYPE => new ByTestCenter([
                 ByTestCenter::OPTION_READER => new Proctor(),
-                ByTestCenter::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions)
+                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
             TestTaker::TYPE => new ByEligibility([
                 ByEligibility::OPTION_READER => new TestTaker(),
-                ByEligibility::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions)
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
             Delivery::TYPE => new ByEligibility([
                 ByEligibility::OPTION_READER => new Delivery(),
-                ByEligibility::OPTION_FORMATTER => new DefaultFormatter(
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
                     [
-                        DefaultFormatter::OPTION_EXCLUDED_FIELDS => [
+                        RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
                             TaoOntology::PROPERTY_UPDATED_AT,
                             Entity::CREATED_AT,
                             DeliveryAssemblyService::PROPERTY_ORIGIN,
@@ -98,14 +98,14 @@ class RegisterServices extends InstallAction
                 )
             ]),
             LtiConsumers::TYPE => new LtiConsumers([
-                ByEligibility::OPTION_FORMATTER => new DefaultFormatter($defaultFormatterOptions)
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
         ];
-        $dataProviders = new DataProviderCollection([
-            DataProviderCollection::OPTION_DATA_PROVIDERS => $providers
+        $dataProviders = new SyncDataProviderCollection([
+            SyncDataProviderCollection::OPTION_DATA_PROVIDERS => $providers
         ]);
 
-        $this->getServiceManager()->register(DataProviderCollection::SERVICE_ID, $dataProviders);
-        $this->getServiceManager()->register(Export::SERVICE_ID, new Export());
+        $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
+        $this->getServiceManager()->register(ExportPackage::SERVICE_ID, new ExportPackage());
     }
 }

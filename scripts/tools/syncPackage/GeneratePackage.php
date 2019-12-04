@@ -21,12 +21,11 @@
 
 namespace oat\taoSyncServer\scripts\tools\syncPackage;
 
-
 use common_exception_Error;
 use common_report_Report;
 use oat\oatbox\extension\script\ScriptAction;
 use oat\taoSync\model\Exception\SyncBaseException;
-use oat\taoSyncServer\export\service\Export;
+use oat\taoSyncServer\export\service\ExportPackage;
 
 /**
  * php index.php 'oat\taoSyncServer\scripts\tools\syncPackage\GeneratePackage'
@@ -105,10 +104,10 @@ class GeneratePackage extends ScriptAction
     }
 
     /**
-     * @return Export
+     * @return ExportPackage
      */
     protected function getExportService()
     {
-        return $this->getServiceLocator()->get(Export::SERVICE_ID);
+        return $this->getServiceLocator()->get(ExportPackage::SERVICE_ID);
     }
 }

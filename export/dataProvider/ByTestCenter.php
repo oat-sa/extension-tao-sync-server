@@ -23,7 +23,7 @@ namespace oat\taoSyncServer\export\dataProvider;
 
 use oat\taoSync\export\dataProvider\dataReader\AbstractDataReader;
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
-use oat\taoSyncServer\exception\DataProviderException;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 
 class ByTestCenter extends AbstractDataProvider
 {
@@ -39,7 +39,7 @@ class ByTestCenter extends AbstractDataProvider
 
     /**
      * @return string
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     public function getType()
     {
@@ -49,12 +49,12 @@ class ByTestCenter extends AbstractDataProvider
     /**
      * @param array $params
      * @return array
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     public function getResources(array $params)
     {
         if (!array_key_exists(TestCenter::TYPE, $params) || !$params[TestCenter::TYPE]) {
-            throw new DataProviderException('Required param test center is missing');
+            throw new SyncDataProviderException('Required param test center is missing');
         }
 
         return $this->getDataReader()->getData(current($params[TestCenter::TYPE]));
@@ -62,14 +62,14 @@ class ByTestCenter extends AbstractDataProvider
 
     /**
      * @return AbstractDataReader
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     protected function getDataReader()
     {
         $reader = $this->getOption(self::OPTION_READER);
 
         if (!$reader instanceof AbstractDataReader) {
-            throw new DataProviderException('Invalid data reader for ' . __CLASS__);
+            throw new SyncDataProviderException('Invalid data reader for ' . __CLASS__);
         }
 
         return $this->propagate($reader);

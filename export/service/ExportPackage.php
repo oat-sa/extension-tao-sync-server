@@ -22,14 +22,14 @@
 namespace oat\taoSyncServer\export\service;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Exception\SyncBaseException;
+use oat\taoSync\package\SyncPackageService;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
-use oat\taoSync\package\PackageService;
-use oat\taoSync\model\dataProvider\DataProviderCollection;
 
-class Export extends ConfigurableService
+class ExportPackage extends ConfigurableService
 {
-    const SERVICE_ID = 'taoSync/Export';
+    const SERVICE_ID = 'taoSync/exportPackage';
 
     const FILE_PREFIX = 'syncPackageServer';
 
@@ -42,24 +42,24 @@ class Export extends ConfigurableService
     {
         $data = $this->getDataProviderCollection()->getData([TestCenter::PARAM_ORG_ID => $orgId]);
 
-        $fileName = self::FILE_PREFIX .'_'. $syncId . '.json';
+        $fileName = self::FILE_PREFIX . '_' . $syncId . '.json';
 
         $this->getPackageService()->createPackage($data, $fileName);
     }
 
     /**
-     * @return DataProviderCollection
+     * @return SyncDataProviderCollection
      */
     private function getDataProviderCollection()
     {
-        return $this->getServiceLocator()->get(DataProviderCollection::SERVICE_ID);
+        return $this->getServiceLocator()->get(SyncDataProviderCollection::SERVICE_ID);
     }
 
     /**
-     * @return PackageService
+     * @return SyncPackageService
      */
     private function getPackageService()
     {
-        return $this->getServiceLocator()->get(PackageService::SERVICE_ID);
+        return $this->getServiceLocator()->get(SyncPackageService::SERVICE_ID);
     }
 }

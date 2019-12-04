@@ -22,8 +22,8 @@
 namespace oat\taoSyncServer\export\dataProvider;
 
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoSync\model\synchronizer\custom\byOrganisationId\OrganisationIdTrait;
-use oat\taoSyncServer\exception\DataProviderException;
 
 class TestCenter extends AbstractDataProvider
 {
@@ -40,12 +40,12 @@ class TestCenter extends AbstractDataProvider
     /**
      * @param array $params
      * @return array
-     * @throws DataProviderException
+     * @throws SyncDataProviderException
      */
     public function getResources(array $params)
     {
         if (!isset($params[self::PARAM_ORG_ID])) {
-            throw new DataProviderException('Organisation id required');
+            throw new SyncDataProviderException('Organisation id required');
         }
 
         $testCenters = $this->getTestCentersByOrganisationId($params[self::PARAM_ORG_ID]);
@@ -54,7 +54,7 @@ class TestCenter extends AbstractDataProvider
             return [];
         }
         if (count($testCenters) > 1) {
-            throw new DataProviderException(
+            throw new SyncDataProviderException(
                 sprintf('Multiply test centers for org ID %s', $params[self::PARAM_ORG_ID])
             );
         }

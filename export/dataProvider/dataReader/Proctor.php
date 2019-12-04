@@ -25,7 +25,7 @@ use oat\generis\model\GenerisRdf;
 use oat\tao\model\TaoOntology;
 use oat\taoProctoring\model\ProctorService;
 use oat\taoSync\export\dataProvider\dataReader\AbstractDataReader;
-use oat\taoSyncServer\exception\DataProviderException;
+use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoTestCenter\model\ProctorManagementService;
 
 class Proctor extends AbstractDataReader
@@ -38,7 +38,7 @@ class Proctor extends AbstractDataReader
     public function getData(array $testCenter)
     {
         if (!array_key_exists('id', $testCenter)) {
-            throw new DataProviderException('Invalid  data for Proctor data provider');
+            throw new SyncDataProviderException('Invalid  data for Proctor data provider');
         }
 
         $eligibility = $this->getClass(TaoOntology::CLASS_URI_TAO_USER)->searchInstances(
