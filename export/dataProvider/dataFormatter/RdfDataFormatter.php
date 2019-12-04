@@ -22,18 +22,27 @@
 namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 
 use core_kernel_classes_Resource;
+use oat\generis\model\OntologyAwareTrait;
+use oat\generis\model\OntologyRdf;
 use oat\taoSync\export\dataProvider\dataFormatter\AbstractDataFormatter;
 
 class RdfDataFormatter extends AbstractDataFormatter
 {
+    use OntologyAwareTrait;
+
     const OPTION_EXCLUDED_FIELDS = 'excluded-fields';
+    const OPTION_ROOT_CLASS = 'root-class';
 
     /**
      * @inheritDoc
      */
     public function format($resource)
     {
-        return $this->formatResource($resource);
+        $properties = $this->formatResource($resource);
+        if ($this->isResourceClassNeed($properties)) {
+            $properties['classes'] = $this->getResourceClasses($properties[OntologyRdf::RDF_TYPE]);
+        }
+        return $properties;
     }
 
     /**
@@ -45,6 +54,34 @@ class RdfDataFormatter extends AbstractDataFormatter
         $properties = $this->filterProperties($resource->getRdfTriples()->toArray());
         $properties['id'] = $resource->getUri();
         return $properties;
+    }
+
+    /**
+     * @param array $properties
+     * @return bool
+     */
+    private function isResourceClassNeed(array $properties)
+    {
+        return $this->hasOption(self::OPTION_ROOT_CLASS)
+            && array_key_exists(OntologyRdf::RDF_TYPE, $properties)
+            && $properties[OntologyRdf::RDF_TYPE] !== $this->getOptions(self::OPTION_ROOT_CLASS);
+    }
+
+    /**
+     * @param string $uri
+     * @return array
+     */
+    private function getResourceClasses($uri)
+    {
+       $class = $this->getClass($uri);
+
+       $parentClasses = $class->getParentClasses(true);
+       $result = [$this->formatResource($class)];
+
+       foreach ($parentClasses as $parentClass) {
+           $result[] = $this->formatResource($parentClass);
+       }
+       return $result;
     }
 
     /**

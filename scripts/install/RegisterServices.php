@@ -39,6 +39,8 @@ use oat\taoSyncServer\export\dataProvider\LtiConsumers;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
 use oat\taoSyncServer\export\service\ExportPackage;
 use common_Exception;
+use oat\taoTestCenter\model\TestCenterService;
+use oat\taoTestTaker\models\TestTakerService;
 
 /**
  * php index.php 'oat\taoSyncServer\install\RegisterServices'
@@ -63,7 +65,12 @@ class RegisterServices extends InstallAction
 
         $providers = [
             TestCenter::TYPE => new TestCenter([
-                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions),
+                ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter(
+                    array_merge(
+                        $defaultFormatterOptions,
+                        [RdfDataFormatter::OPTION_ROOT_CLASS => TestCenterService::CLASS_URI]
+                    )
+                ),
             ]),
             Eligibility::TYPE => new ByTestCenter([
                 ByTestCenter::OPTION_READER => new Eligibility(),
@@ -79,7 +86,12 @@ class RegisterServices extends InstallAction
             ]),
             TestTaker::TYPE => new ByEligibility([
                 ByEligibility::OPTION_READER => new TestTaker(),
-                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+                    array_merge(
+                        $defaultFormatterOptions,
+                        [RdfDataFormatter::OPTION_ROOT_CLASS => TestTakerService::CLASS_URI_SUBJECT]
+                    )
+                ),
             ]),
             Delivery::TYPE => new ByEligibility([
                 ByEligibility::OPTION_READER => new Delivery(),
@@ -93,7 +105,8 @@ class RegisterServices extends InstallAction
                             DeliveryAssemblyService::PROPERTY_DELIVERY_TIME,
                             DeliveryAssemblyService::PROPERTY_DELIVERY_RUNTIME,
                             ContainerRuntime::PROPERTY_CONTAINER,
-                        ]
+                        ],
+                        RdfDataFormatter::OPTION_ROOT_CLASS => DeliveryAssemblyService::CLASS_URI
                     ]
                 )
             ]),
