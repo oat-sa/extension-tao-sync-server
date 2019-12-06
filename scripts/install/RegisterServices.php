@@ -19,7 +19,7 @@
  * @author Yuri Filippovich
  */
 
-namespace oat\taoSyncServer\install;
+namespace oat\taoSyncServer\scripts\install;
 
 use oat\oatbox\extension\InstallAction;
 use oat\tao\model\TaoOntology;

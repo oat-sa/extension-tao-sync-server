@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\taoSyncServer\update;
+namespace oat\taoSyncServer\scripts\update;
 
 use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;

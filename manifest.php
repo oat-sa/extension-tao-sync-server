@@ -19,8 +19,8 @@
  *
  */
 
-use oat\taoSyncServer\install\RegisterServices;
-use oat\taoSyncServer\update\Updater;
+use oat\taoSyncServer\scripts\install\RegisterServices;
+use oat\taoSyncServer\scripts\update\Updater;
 use oat\taoSync\model\SyncService;
 
 /**
