@@ -64,7 +64,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     {
         return $this->hasOption(self::OPTION_ROOT_CLASS)
             && array_key_exists(OntologyRdf::RDF_TYPE, $properties)
-            && $properties[OntologyRdf::RDF_TYPE] !== $this->getOptions(self::OPTION_ROOT_CLASS);
+            && $properties[OntologyRdf::RDF_TYPE] !== $this->getOption(self::OPTION_ROOT_CLASS);
     }
 
     /**
