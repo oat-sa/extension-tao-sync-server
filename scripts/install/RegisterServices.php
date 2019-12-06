@@ -43,7 +43,7 @@ use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
 
 /**
- * php index.php 'oat\taoSyncServer\install\RegisterServices'
+ * php index.php 'oat\taoSyncServer\scripts\install\RegisterServices'
  *
  * Class RegisterSyncQueueRds
  * @package oat\taoSyncClient\scripts\install
