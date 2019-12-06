@@ -24,7 +24,7 @@ namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 use core_kernel_classes_Resource;
 use oat\generis\model\OntologyAwareTrait;
 use oat\generis\model\OntologyRdf;
-use oat\taoSync\export\dataProvider\dataFormatter\AbstractDataFormatter;
+use oat\taoSync\model\export\dataProvider\dataFormatter\AbstractDataFormatter;
 
 class RdfDataFormatter extends AbstractDataFormatter
 {
