@@ -31,14 +31,6 @@ class ByEligibility extends AbstractDataProvider
     const OPTION_READER = 'reader';
 
     /**
-     * @inheritDoc
-     */
-    public function getParent()
-    {
-        return Eligibility::TYPE;
-    }
-
-    /**
      * @return string
      * @throws SyncDataProviderException
      */

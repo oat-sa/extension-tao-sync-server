@@ -35,7 +35,6 @@ class GeneratePackage extends ScriptAction
 
     const OPTION_SYNCHRONISATION_ID = 'synchronisation_id';
     const OPTION_ORGANISATION_ID = 'organisation_id';
-    const OPTION_UPDATED_FROM = 'updated_from';
 
     /**
      * @return string

@@ -51,52 +51,57 @@ class Updater extends \common_ext_ExtensionUpdater
                 ]
             ];
 
+            $deliveryDataProvider = new ByEligibility([
+                ByEligibility::OPTION_READER => new Delivery(),
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+                    [
+                        RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
+                            TaoOntology::PROPERTY_UPDATED_AT,
+                            Entity::CREATED_AT,
+                            DeliveryAssemblyService::PROPERTY_ORIGIN,
+                            DeliveryAssemblyService::PROPERTY_DELIVERY_DIRECTORY,
+                            DeliveryAssemblyService::PROPERTY_DELIVERY_TIME,
+                            DeliveryAssemblyService::PROPERTY_DELIVERY_RUNTIME,
+                            ContainerRuntime::PROPERTY_CONTAINER,
+                        ],
+                        RdfDataFormatter::OPTION_ROOT_CLASS => DeliveryAssemblyService::CLASS_URI
+                    ]
+                )
+            ]);
+
+            $testTakerDataProvider = new ByEligibility([
+                ByEligibility::OPTION_READER => new TestTaker(),
+                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+                    array_merge(
+                        $defaultFormatterOptions,
+                        [RdfDataFormatter::OPTION_ROOT_CLASS => TestTakerService::CLASS_URI_SUBJECT]
+                    )
+                ),
+            ]);
+
             $providers = [
                 TestCenter::TYPE => new TestCenter([
+                    ByTestCenter::OPTION_CHILD_PROVIDERS => [
+                        Eligibility::TYPE => new ByTestCenter([
+                            ByTestCenter::OPTION_CHILD_PROVIDERS => [$deliveryDataProvider, $testTakerDataProvider],
+                            ByTestCenter::OPTION_READER => new Eligibility(),
+                            ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                        ]),
+                        Administrator::TYPE => new ByTestCenter([
+                            ByTestCenter::OPTION_READER => new Administrator(),
+                            ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                        ]),
+                        Proctor::TYPE => new ByTestCenter([
+                            ByTestCenter::OPTION_READER => new Proctor(),
+                            ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                        ]),
+                    ],
                     ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter(
                         array_merge(
                             $defaultFormatterOptions,
                             [RdfDataFormatter::OPTION_ROOT_CLASS => TestCenterService::CLASS_URI]
                         )
                     ),
-                ]),
-                Eligibility::TYPE => new ByTestCenter([
-                    ByTestCenter::OPTION_READER => new Eligibility(),
-                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
-                ]),
-                Administrator::TYPE => new ByTestCenter([
-                    ByTestCenter::OPTION_READER => new Administrator(),
-                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
-                ]),
-                Proctor::TYPE => new ByTestCenter([
-                    ByTestCenter::OPTION_READER => new Proctor(),
-                    ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
-                ]),
-                TestTaker::TYPE => new ByEligibility([
-                    ByEligibility::OPTION_READER => new TestTaker(),
-                    ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
-                        array_merge(
-                            $defaultFormatterOptions,
-                            [RdfDataFormatter::OPTION_ROOT_CLASS => TestTakerService::CLASS_URI_SUBJECT]
-                        )
-                    ),
-                ]),
-                Delivery::TYPE => new ByEligibility([
-                    ByEligibility::OPTION_READER => new Delivery(),
-                    ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
-                        [
-                            RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
-                                TaoOntology::PROPERTY_UPDATED_AT,
-                                Entity::CREATED_AT,
-                                DeliveryAssemblyService::PROPERTY_ORIGIN,
-                                DeliveryAssemblyService::PROPERTY_DELIVERY_DIRECTORY,
-                                DeliveryAssemblyService::PROPERTY_DELIVERY_TIME,
-                                DeliveryAssemblyService::PROPERTY_DELIVERY_RUNTIME,
-                                ContainerRuntime::PROPERTY_CONTAINER,
-                            ],
-                            RdfDataFormatter::OPTION_ROOT_CLASS => DeliveryAssemblyService::CLASS_URI
-                        ]
-                    )
                 ]),
                 LtiConsumers::TYPE => new LtiConsumers([
                     ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)

@@ -30,14 +30,6 @@ class ByTestCenter extends AbstractDataProvider
     const OPTION_READER = 'reader';
 
     /**
-     * @inheritDoc
-     */
-    public function getParent()
-    {
-        return TestCenter::TYPE;
-    }
-
-    /**
      * @return string
      * @throws SyncDataProviderException
      */
