@@ -37,7 +37,6 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
 use oat\taoSyncServer\export\dataProvider\LtiConsumers;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
-use oat\taoSyncServer\export\service\ExportPackage;
 use common_Exception;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
@@ -124,6 +123,5 @@ class RegisterServices extends InstallAction
         ]);
 
         $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
-        $this->getServiceManager()->register(ExportPackage::SERVICE_ID, new ExportPackage());
     }
 }

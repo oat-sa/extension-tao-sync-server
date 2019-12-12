@@ -112,7 +112,6 @@ class Updater extends \common_ext_ExtensionUpdater
             ]);
 
             $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
-            $this->getServiceManager()->register(ExportPackage::SERVICE_ID, new ExportPackage());
             $this->setVersion('0.2.0');
         }
     }

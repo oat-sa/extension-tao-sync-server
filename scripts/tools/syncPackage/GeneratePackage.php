@@ -94,6 +94,6 @@ class GeneratePackage extends ScriptAction
      */
     protected function getExportService()
     {
-        return $this->getServiceLocator()->get(ExportPackage::SERVICE_ID);
+        return $this->getServiceLocator()->get(ExportPackage::class);
     }
 }
