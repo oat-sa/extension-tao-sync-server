@@ -24,7 +24,7 @@ namespace oat\taoSyncServer\export\dataProvider\dataReader;
 use oat\generis\model\GenerisRdf;
 use oat\tao\model\TaoOntology;
 use oat\taoProctoring\model\ProctorService;
-use oat\taoSync\model\export\dataProvider\dataReader\AbstractDataReader;
+use oat\taoSync\model\dataProvider\dataReader\AbstractDataReader;
 use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoTestCenter\model\ProctorManagementService;
 

@@ -21,7 +21,7 @@
 
 namespace oat\taoSyncServer\export\dataProvider;
 
-use oat\taoSync\model\export\dataProvider\dataReader\AbstractDataReader;
+use oat\taoSync\model\dataProvider\dataReader\AbstractDataReader;
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
 use oat\taoSync\model\Exception\SyncDataProviderException;
 
