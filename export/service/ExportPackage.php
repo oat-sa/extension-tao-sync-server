@@ -34,17 +34,16 @@ class ExportPackage extends ConfigurableService
     const FILE_PREFIX = 'syncPackageServer';
 
     /**
-     * @param int $syncId
      * @param string $orgId
      * @throws SyncBaseException
      */
-    public function createPackage($syncId, $orgId)
+    public function createPackage($orgId)
     {
         $data = $this->getDataProviderCollection()->getData([TestCenter::PARAM_ORG_ID => $orgId]);
 
-        $fileName = self::FILE_PREFIX . '_' . $syncId . '.json';
+        $fileName = self::FILE_PREFIX . '_' . time() . '.json';
 
-        $this->getPackageService()->createPackage($data, $fileName);
+        $this->getPackageService()->createPackage($data, $fileName, $orgId);
     }
 
     /**

@@ -32,8 +32,6 @@ use oat\taoSyncServer\export\service\ExportPackage;
  */
 class GeneratePackage extends ScriptAction
 {
-
-    const OPTION_SYNCHRONISATION_ID = 'synchronisation_id';
     const OPTION_ORGANISATION_ID = 'organisation_id';
 
     /**
@@ -50,14 +48,6 @@ class GeneratePackage extends ScriptAction
     protected function provideOptions()
     {
         return [
-            self::OPTION_SYNCHRONISATION_ID => [
-                'prefix'       => 's',
-                'flag'         => false,
-                'cast'         => 'integer',
-                'longPrefix'   => self::OPTION_SYNCHRONISATION_ID,
-                'description'  => 'Synchronisation id',
-                'required' => true
-            ],
             self::OPTION_ORGANISATION_ID => [
                 'prefix'       => 'o',
                 'flag'         => false,
@@ -90,10 +80,7 @@ class GeneratePackage extends ScriptAction
         $report = common_report_Report::createInfo('Script execution started');
 
         try {
-            $this->getExportService()->createPackage(
-                $this->getOption(self::OPTION_SYNCHRONISATION_ID),
-                $this->getOption(self::OPTION_ORGANISATION_ID)
-            );
+            $this->getExportService()->createPackage($this->getOption(self::OPTION_ORGANISATION_ID));
             $report->add(common_report_Report::createSuccess('Done'));
         } catch (SyncBaseException $e) {
             $report->add(common_report_Report::createFailure($e->getMessage()));
