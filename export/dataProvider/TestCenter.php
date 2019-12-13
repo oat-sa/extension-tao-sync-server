@@ -53,12 +53,6 @@ class TestCenter extends AbstractDataProvider
         if (!$testCenters) {
             return [];
         }
-        if (count($testCenters) > 1) {
-            throw new SyncDataProviderException(
-                sprintf('Multiply test centers for org ID %s', $params[self::PARAM_ORG_ID])
-            );
-        }
-
         return $testCenters;
     }
 }
