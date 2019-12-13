@@ -29,8 +29,6 @@ use oat\taoSyncServer\export\dataProvider\TestCenter;
 
 class ExportPackage extends ConfigurableService
 {
-    const SERVICE_ID = 'taoSyncServer/exportPackage';
-
     const FILE_PREFIX = 'syncPackageServer';
 
     /**
