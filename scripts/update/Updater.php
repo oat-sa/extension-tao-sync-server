@@ -28,14 +28,13 @@ use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
-use oat\taoSyncServer\export\dataProvider\dataReader\Administrator;
+use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
 use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
 use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
 use oat\taoSyncServer\export\dataProvider\LtiConsumers;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
-use oat\taoSyncServer\export\service\ExportPackage;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
 
@@ -87,8 +86,8 @@ class Updater extends \common_ext_ExtensionUpdater
                             ByTestCenter::OPTION_READER => new Eligibility(),
                             ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
                         ]),
-                        Administrator::TYPE => new ByTestCenter([
-                            ByTestCenter::OPTION_READER => new Administrator(),
+                        TestCenterAdministrator::TYPE => new ByTestCenter([
+                            ByTestCenter::OPTION_READER => new TestCenterAdministrator(),
                             ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
                         ]),
                         Proctor::TYPE => new ByTestCenter([

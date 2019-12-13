@@ -30,7 +30,7 @@ use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
-use oat\taoSyncServer\export\dataProvider\dataReader\Administrator;
+use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
 use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
 use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
@@ -98,8 +98,8 @@ class RegisterServices extends InstallAction
                         ByTestCenter::OPTION_READER => new Eligibility(),
                         ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
                     ]),
-                    Administrator::TYPE => new ByTestCenter([
-                        ByTestCenter::OPTION_READER => new Administrator(),
+                    TestCenterAdministrator::TYPE => new ByTestCenter([
+                        ByTestCenter::OPTION_READER => new TestCenterAdministrator(),
                         ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
                     ]),
                     Proctor::TYPE => new ByTestCenter([

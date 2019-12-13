@@ -28,7 +28,7 @@ use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoTestCenter\model\ProctorManagementService;
 use oat\taoTestCenter\model\TestCenterService;
 
-class Administrator extends AbstractDataReader
+class TestCenterAdministrator extends AbstractDataReader
 {
     const TYPE = 'Administrator';
 
