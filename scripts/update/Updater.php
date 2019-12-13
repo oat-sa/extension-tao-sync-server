@@ -33,7 +33,7 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
 use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
-use oat\taoSyncServer\export\dataProvider\LtiConsumers;
+use oat\taoSyncServer\export\dataProvider\LtiConsumer;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
@@ -102,7 +102,7 @@ class Updater extends \common_ext_ExtensionUpdater
                         )
                     ),
                 ]),
-                LtiConsumers::TYPE => new LtiConsumers([
+                LtiConsumer::TYPE => new LtiConsumer([
                     ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
                 ]),
             ];

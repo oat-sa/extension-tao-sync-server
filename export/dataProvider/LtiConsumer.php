@@ -26,7 +26,7 @@ use oat\generis\model\data\Ontology;
 use oat\taoLti\models\classes\ConsumerService;
 use oat\taoSync\model\dataProvider\AbstractDataProvider;
 
-class LtiConsumers extends AbstractDataProvider
+class LtiConsumer extends AbstractDataProvider
 {
     const TYPE = 'ltiConsumers';
 

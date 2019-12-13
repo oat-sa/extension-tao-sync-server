@@ -35,7 +35,7 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
 use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
-use oat\taoSyncServer\export\dataProvider\LtiConsumers;
+use oat\taoSyncServer\export\dataProvider\LtiConsumer;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
 use common_Exception;
 use oat\taoTestCenter\model\TestCenterService;
@@ -114,7 +114,7 @@ class RegisterServices extends InstallAction
                     )
                 ),
             ]),
-            LtiConsumers::TYPE => new LtiConsumers([
+            LtiConsumer::TYPE => new LtiConsumer([
                 ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
             ]),
         ];
