@@ -19,7 +19,7 @@
  *
  */
 
-use oat\taoSyncServer\scripts\install\RegisterServices;
+use oat\taoSyncServer\scripts\install\RegisterDataProviders;
 use oat\taoSyncServer\scripts\update\Updater;
 use oat\taoSync\model\SyncService;
 
@@ -42,7 +42,7 @@ return [
     ],
     'install'        => [
         'php' => [
-            RegisterServices::class,
+            RegisterDataProviders::class,
         ]
     ],
     'uninstall' => [],

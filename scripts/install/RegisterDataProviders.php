@@ -47,7 +47,7 @@ use oat\taoTestTaker\models\TestTakerService;
  * Class RegisterSyncQueueRds
  * @package oat\taoSyncClient\scripts\install
  */
-class RegisterServices extends InstallAction
+class RegisterDataProviders extends InstallAction
 {
     /**
      * @param $params
