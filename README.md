@@ -20,11 +20,10 @@ Controls synchronization packages
 
 | Option | Description |
 | --- | --- |
-| `s` | Synchronization id - unique id for all synchronization process |
 | `o` | Organization id |
 
 **Example**
 
-`php index.php 'oat\taoSyncServer\scripts\tools\syncPackage\GeneratePackage' -s 1 -o 1`
+`php index.php 'oat\taoSyncServer\scripts\tools\syncPackage\GeneratePackage' -o 1`
 
 This command will generate packages for test center with Organization id = 1
