@@ -21,15 +21,22 @@
 
 namespace oat\taoSyncServer\scripts\install;
 
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\extension\InstallAction;
 use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
+use oat\taoEncryption\Service\EncryptionSymmetricService;
+use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
+use oat\taoEncryption\Service\Sync\EncryptUserSyncFormatter;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\DeliveryDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfEncryptDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
 use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
@@ -62,9 +69,22 @@ class RegisterDataProviders extends InstallAction
             ]
         ];
 
+        $defaultEncryptFormatterOptions = array_merge(
+            $defaultFormatterOptions,
+            [
+                EncryptUserSyncFormatter::OPTION_ENCRYPTION_SERVICE => EncryptionSymmetricService::SERVICE_ID,
+                EncryptUserSyncFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE => SimpleKeyProviderService::SERVICE_ID,
+                EncryptUserSyncFormatter::OPTION_ENCRYPTED_PROPERTIES => [
+                    OntologyRdfs::RDFS_LABEL,
+                    GenerisRdf::PROPERTY_USER_FIRSTNAME,
+                    GenerisRdf::PROPERTY_USER_LASTNAME,
+                    GenerisRdf::PROPERTY_USER_MAIL
+                ],
+            ]);
+
         $deliveryDataProvider = new ByEligibility([
             ByEligibility::OPTION_READER => new Delivery(),
-            ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+            ByEligibility::OPTION_FORMATTER => new DeliveryDataFormatter(
                 [
                     RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
                         TaoOntology::PROPERTY_UPDATED_AT,
@@ -82,9 +102,9 @@ class RegisterDataProviders extends InstallAction
 
         $testTakerDataProvider = new ByEligibility([
             ByEligibility::OPTION_READER => new TestTaker(),
-            ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
+            ByEligibility::OPTION_FORMATTER => new RdfEncryptDataFormatter(
                 array_merge(
-                    $defaultFormatterOptions,
+                    $defaultEncryptFormatterOptions,
                     [RdfDataFormatter::OPTION_ROOT_CLASS => TestTakerService::CLASS_URI_SUBJECT]
                 )
             ),
@@ -100,11 +120,11 @@ class RegisterDataProviders extends InstallAction
                     ]),
                     TestCenterAdministrator::TYPE => new ByTestCenter([
                         ByTestCenter::OPTION_READER => new TestCenterAdministrator(),
-                        ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                        ByTestCenter::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
                     ]),
                     Proctor::TYPE => new ByTestCenter([
                         ByTestCenter::OPTION_READER => new Proctor(),
-                        ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                        ByTestCenter::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
                     ]),
                 ],
                 ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter(
@@ -115,7 +135,7 @@ class RegisterDataProviders extends InstallAction
                 ),
             ]),
             LtiConsumer::TYPE => new LtiConsumer([
-                ByEligibility::OPTION_FORMATTER => new RdfDataFormatter($defaultFormatterOptions)
+                ByEligibility::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
             ]),
         ];
         $dataProviders = new SyncDataProviderCollection([
