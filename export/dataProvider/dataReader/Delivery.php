@@ -40,7 +40,11 @@ class Delivery extends AbstractDataReader
             if (!array_key_exists(EligibilityService::PROPERTY_DELIVERY_URI, $eligibility)) {
                 throw new SyncDataProviderException('Invalid eligibility data for testTaker data provider');
             }
-            $deliveries[] = $this->getResource($eligibility[EligibilityService::PROPERTY_DELIVERY_URI]);
+            foreach ($eligibility[EligibilityService::PROPERTY_DELIVERY_URI] as $id) {
+                if (!array_key_exists($id, $deliveries)) {
+                    $deliveries[$id] = $this->getResource($id);
+                }
+            }
         }
         return $deliveries;
     }

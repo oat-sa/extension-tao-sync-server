@@ -40,7 +40,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     {
         $properties = $this->formatResource($resource);
         if ($this->isResourceClassNeed($properties)) {
-            $properties['classes'] = $this->getResourceClasses($properties[OntologyRdf::RDF_TYPE]);
+            $properties['classes'] = $this->getResourceClasses(current($properties[OntologyRdf::RDF_TYPE]));
         }
         return $properties;
     }
@@ -60,7 +60,7 @@ class RdfDataFormatter extends AbstractDataFormatter
      * @param array $properties
      * @return bool
      */
-    private function isResourceClassNeed(array $properties)
+    protected function isResourceClassNeed(array $properties)
     {
         return $this->hasOption(self::OPTION_ROOT_CLASS)
             && array_key_exists(OntologyRdf::RDF_TYPE, $properties)
@@ -71,7 +71,7 @@ class RdfDataFormatter extends AbstractDataFormatter
      * @param string $uri
      * @return array
      */
-    private function getResourceClasses($uri)
+    protected function getResourceClasses($uri)
     {
        $class = $this->getClass($uri);
 
@@ -88,14 +88,17 @@ class RdfDataFormatter extends AbstractDataFormatter
      * @param array $triples
      * @return array
      */
-    private function filterProperties(array $triples)
+    protected function filterProperties(array $triples)
     {
         $excludedProperties = $this->getExcludedProperties();
         $properties = [];
 
         foreach ($triples as $triple) {
             if (!in_array($triple->predicate, $excludedProperties)) {
-                $properties[$triple->predicate] = $triple->object;
+                if (!array_key_exists($triple->predicate, $properties)) {
+                    $properties[$triple->predicate] = [];
+                }
+                $properties[$triple->predicate][] = $triple->object;
             }
 
         }
@@ -105,7 +108,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     /**
      * @return array
      */
-    private function getExcludedProperties()
+    protected function getExcludedProperties()
     {
         if (is_array($this->getOption(self::OPTION_EXCLUDED_FIELDS))) {
             return $this->getOption(self::OPTION_EXCLUDED_FIELDS);
