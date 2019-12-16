@@ -32,6 +32,9 @@ class TestCenter extends AbstractDataProvider
     const PARAM_ORG_ID = 'orgID';
     const TYPE = 'testCenter';
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return self::TYPE;
@@ -48,11 +51,6 @@ class TestCenter extends AbstractDataProvider
             throw new SyncDataProviderException('Organisation id required');
         }
 
-        $testCenters = $this->getTestCentersByOrganisationId($params[self::PARAM_ORG_ID]);
-
-        if (!$testCenters) {
-            return [];
-        }
-        return $testCenters;
+        return $this->getTestCentersByOrganisationId($params[self::PARAM_ORG_ID]);
     }
 }
