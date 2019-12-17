@@ -34,15 +34,83 @@ class RdfDataFormatter extends AbstractDataFormatter
     const OPTION_ROOT_CLASS = 'root-class';
 
     /**
+     * @param core_kernel_classes_Resource[] $resources
+     * @return array
+     */
+    public function formatAll(array $resources)
+    {
+        $data = [];
+        $classesToExport = [];
+
+        foreach ($resources as $resource) {
+            $properties = $this->formatResource($resource);
+            if ($this->isResourceClassNeed($properties)) {
+                $classesToExport[current($properties[OntologyRdf::RDF_TYPE])]
+                    = current($properties[OntologyRdf::RDF_TYPE]);
+            }
+            $data[] = $properties;
+        }
+
+        if ($classesToExport) {
+            $data[0]['classes'] = $this->getFormattedClasses(
+                $classesToExport, $this->getOption(self::OPTION_ROOT_CLASS)
+            );
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $classesToExport
+     * @param string $rootClass
+     * @return array
+     */
+    protected function getFormattedClasses(array $classesToExport, $rootClass)
+    {
+        return $this->formatClasses(
+            $this->getParentClasses($classesToExport, $rootClass)
+        );
+    }
+
+    /**
+     * @param array $classesToExport
+     * @param string $rootClass
+     * @return array
+     */
+    protected function getParentClasses(array $classesToExport, $rootClass)
+    {
+        foreach ($classesToExport as $class) {
+            $class = $this->getClass($class);
+            foreach ($class->getParentClasses(true) as $parent) {
+                if($parent->getUri() == $rootClass || array_key_exists($parent->getUri(), $classesToExport)) {
+                    break;
+                }
+                $classesToExport[$parent->getUri()] = $parent->getUri();
+            }
+        }
+        return $classesToExport;
+    }
+
+    /**
+     * @param array $ids
+     * @return array
+     */
+    protected function formatClasses(array $ids)
+    {
+        $result = [];
+
+        foreach ($ids as $id) {
+            $result[] = $this->formatResource($this->getClass($id));
+        }
+        return $result;
+    }
+
+    /**
      * @inheritDoc
      */
     public function format($resource)
     {
-        $properties = $this->formatResource($resource);
-        if ($this->isResourceClassNeed($properties)) {
-            $properties['classes'] = $this->getResourceClasses(current($properties[OntologyRdf::RDF_TYPE]));
-        }
-        return $properties;
+        return $this->formatResource($resource);
     }
 
     /**
@@ -64,24 +132,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     {
         return $this->hasOption(self::OPTION_ROOT_CLASS)
             && array_key_exists(OntologyRdf::RDF_TYPE, $properties)
-            && $properties[OntologyRdf::RDF_TYPE] !== $this->getOption(self::OPTION_ROOT_CLASS);
-    }
-
-    /**
-     * @param string $uri
-     * @return array
-     */
-    protected function getResourceClasses($uri)
-    {
-       $class = $this->getClass($uri);
-
-       $parentClasses = $class->getParentClasses(true);
-       $result = [$this->formatResource($class)];
-
-       foreach ($parentClasses as $parentClass) {
-           $result[] = $this->formatResource($parentClass);
-       }
-       return $result;
+            && current($properties[OntologyRdf::RDF_TYPE]) !== $this->getOption(self::OPTION_ROOT_CLASS);
     }
 
     /**
