@@ -51,7 +51,7 @@ class GeneratePackage extends ScriptAction
             self::OPTION_ORGANISATION_ID => [
                 'prefix'       => 'o',
                 'flag'         => false,
-                'cast'         => 'integer',
+                'cast'         => 'string',
                 'longPrefix'   => self::OPTION_ORGANISATION_ID,
                 'description'  => 'Organisation id',
                 'required' => true
