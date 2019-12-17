@@ -75,9 +75,9 @@ class RegisterDataProviders extends InstallAction
         $defaultEncryptFormatterOptions = array_merge(
             $defaultFormatterOptions,
             [
-                EncryptUserSyncFormatter::OPTION_ENCRYPTION_SERVICE => EncryptionSymmetricService::SERVICE_ID,
-                EncryptUserSyncFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE => SimpleKeyProviderService::SERVICE_ID,
-                EncryptUserSyncFormatter::OPTION_ENCRYPTED_PROPERTIES => [
+                RdfEncryptDataFormatter::OPTION_ENCRYPTION_SERVICE => EncryptionSymmetricService::SERVICE_ID,
+                RdfEncryptDataFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE => SimpleKeyProviderService::SERVICE_ID,
+                RdfEncryptDataFormatter::OPTION_ENCRYPTED_PROPERTIES => [
                     OntologyRdfs::RDFS_LABEL,
                     GenerisRdf::PROPERTY_USER_FIRSTNAME,
                     GenerisRdf::PROPERTY_USER_LASTNAME,
