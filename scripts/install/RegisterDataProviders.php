@@ -28,13 +28,16 @@ use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
+use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
+use oat\taoEncryption\Service\LtiConsumer\EncryptLtiConsumerFormatterService;
 use oat\taoEncryption\Service\Sync\EncryptUserSyncFormatter;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\DeliveryDataFormatter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\EncryptLtiConsumerFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfEncryptDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
@@ -135,7 +138,14 @@ class RegisterDataProviders extends InstallAction
                 ),
             ]),
             LtiConsumer::TYPE => new LtiConsumer([
-                ByEligibility::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
+                ByEligibility::OPTION_FORMATTER => new EncryptLtiConsumerFormatter(
+                    [
+                        EncryptLtiConsumerFormatterService::OPTION_ENCRYPTION_SERVICE
+                        => EncryptionSymmetricService::SERVICE_ID,
+                        EncryptLtiConsumerFormatterService::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE
+                        => FileKeyProviderService::SERVICE_ID
+                    ]
+                )
             ]),
         ];
         $dataProviders = new SyncDataProviderCollection([
