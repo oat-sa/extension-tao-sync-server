@@ -43,7 +43,7 @@ class Proctor extends AbstractDataReader
 
         $eligibility = $this->getClass(TaoOntology::CLASS_URI_TAO_USER)->searchInstances(
             [
-                ProctorManagementService::PROPERTY_ASSIGNED_PROCTOR_URI => $testCenter['id'],
+                ProctorManagementService::PROPERTY_ASSIGNED_PROCTOR_URI => $testCenter['uri'],
                 GenerisRdf::PROPERTY_USER_ROLES => ProctorService::ROLE_PROCTOR,
             ],
             ['recursive' => false, 'like' => false]
