@@ -41,5 +41,4 @@ class DeliveryDataFormatter extends RdfDataFormatter
 
         return $properties;
     }
-
 }

@@ -128,9 +128,9 @@ class Updater extends \common_ext_ExtensionUpdater
                 LtiConsumer::TYPE => new LtiConsumer([
                     ByEligibility::OPTION_FORMATTER => new EncryptLtiConsumerFormatter(
                         [
-                            EncryptLtiConsumerFormatterService::OPTION_ENCRYPTION_SERVICE
+                            EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_SERVICE
                             => EncryptionSymmetricService::SERVICE_ID,
-                            EncryptLtiConsumerFormatterService::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE
+                            EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE
                             => FileKeyProviderService::SERVICE_ID
                         ]
                     )
