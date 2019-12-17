@@ -37,12 +37,12 @@ class TestCenterAdministrator extends AbstractDataReader
      */
     public function getData(array $testCenter)
     {
-        if (!array_key_exists('id', $testCenter)) {
+        if (!array_key_exists('uri', $testCenter)) {
             throw new SyncDataProviderException('Invalid  data for Administrator data provider');
         }
         $administrators = $this->getClass(TaoOntology::CLASS_URI_TAO_USER)->searchInstances(
             [
-                ProctorManagementService::PROPERTY_ADMINISTRATOR_URI => $testCenter['id'],
+                ProctorManagementService::PROPERTY_ADMINISTRATOR_URI => $testCenter['uri'],
                 GenerisRdf::PROPERTY_USER_ROLES => TestCenterService::ROLE_TESTCENTER_ADMINISTRATOR,
             ],
             ['recursive' => false, 'like' => false]

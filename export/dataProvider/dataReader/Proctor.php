@@ -37,7 +37,7 @@ class Proctor extends AbstractDataReader
      */
     public function getData(array $testCenter)
     {
-        if (!array_key_exists('id', $testCenter)) {
+        if (!array_key_exists('uri', $testCenter)) {
             throw new SyncDataProviderException('Invalid  data for Proctor data provider');
         }
 

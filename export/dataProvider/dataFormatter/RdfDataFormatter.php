@@ -120,7 +120,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     public function formatResource(core_kernel_classes_Resource $resource)
     {
         $properties = $this->filterProperties($resource->getRdfTriples()->toArray());
-        $properties['id'] = $resource->getUri();
+        $properties['uri'] = $resource->getUri();
         return $properties;
     }
 
