@@ -80,8 +80,10 @@ class GeneratePackage extends ScriptAction
         $report = common_report_Report::createInfo('Script execution started');
 
         try {
-            $this->getExportService()->createPackage($this->getOption(self::OPTION_ORGANISATION_ID));
-            $report->add(common_report_Report::createSuccess('Done'));
+            $filename = $this->getExportService()->createPackage(
+                $this->getOption(self::OPTION_ORGANISATION_ID)
+            );
+            $report->add(common_report_Report::createSuccess($filename . ' file created'));
         } catch (SyncBaseException $e) {
             $report->add(common_report_Report::createFailure($e->getMessage()));
         }

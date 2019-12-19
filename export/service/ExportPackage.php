@@ -33,6 +33,7 @@ class ExportPackage extends ConfigurableService
 
     /**
      * @param string $orgId
+     * @return string
      * @throws SyncBaseException
      */
     public function createPackage($orgId)
@@ -41,7 +42,7 @@ class ExportPackage extends ConfigurableService
 
         $fileName = self::FILE_PREFIX . '_' . time() . '.json';
 
-        $this->getPackageService()->createPackage($data, $fileName, $orgId);
+        return $this->getPackageService()->createPackage($data, $fileName, $orgId);
     }
 
     /**
