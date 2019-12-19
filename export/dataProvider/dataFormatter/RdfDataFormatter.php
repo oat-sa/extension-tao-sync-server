@@ -39,20 +39,20 @@ class RdfDataFormatter extends AbstractDataFormatter
      */
     public function formatAll(array $resources)
     {
-        $data = [];
+        $data = ['resources' => []];
         $classesToExport = [];
 
         foreach ($resources as $resource) {
             $properties = $this->formatResource($resource);
             if ($this->isResourceClassNeed($properties)) {
-                $classesToExport[current($properties[OntologyRdf::RDF_TYPE])]
-                    = current($properties[OntologyRdf::RDF_TYPE]);
+                $classesToExport[$properties[OntologyRdf::RDF_TYPE]]
+                    = $properties[OntologyRdf::RDF_TYPE];
             }
-            $data[] = $properties;
+            $data['resources'][] = $properties;
         }
 
         if ($classesToExport) {
-            $data[0]['classes'] = $this->getFormattedClasses(
+            $data['classes'] = $this->getFormattedClasses(
                 $classesToExport, $this->getOption(self::OPTION_ROOT_CLASS)
             );
         }
@@ -132,7 +132,7 @@ class RdfDataFormatter extends AbstractDataFormatter
     {
         return $this->hasOption(self::OPTION_ROOT_CLASS)
             && array_key_exists(OntologyRdf::RDF_TYPE, $properties)
-            && current($properties[OntologyRdf::RDF_TYPE]) !== $this->getOption(self::OPTION_ROOT_CLASS);
+            && $properties[OntologyRdf::RDF_TYPE] !== $this->getOption(self::OPTION_ROOT_CLASS);
     }
 
     /**
@@ -151,7 +151,11 @@ class RdfDataFormatter extends AbstractDataFormatter
                 }
                 $properties[$triple->predicate][] = $triple->object;
             }
-
+        }
+        foreach ($properties as $property => $values) {
+            if (count($values) == 1) {
+                $properties[$property] = current($values);
+            }
         }
         return $properties;
     }

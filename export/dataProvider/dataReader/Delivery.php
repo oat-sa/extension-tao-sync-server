@@ -35,14 +35,19 @@ class Delivery extends AbstractDataReader
     public function getData(array $eligibilityData)
     {
         $deliveries = [];
-        foreach ($eligibilityData as $eligibility) {
 
+        foreach ($eligibilityData as $eligibility) {
             if (!array_key_exists(EligibilityService::PROPERTY_DELIVERY_URI, $eligibility)) {
                 throw new SyncDataProviderException('Invalid eligibility data for testTaker data provider');
             }
-            foreach ($eligibility[EligibilityService::PROPERTY_DELIVERY_URI] as $id) {
-                if (!array_key_exists($id, $deliveries)) {
-                    $deliveries[$id] = $this->getResource($id);
+            if (!is_array($eligibility[EligibilityService::PROPERTY_DELIVERY_URI])) {
+                $deliveries[$eligibility[EligibilityService::PROPERTY_DELIVERY_URI]]
+                    = $this->getResource($eligibility[EligibilityService::PROPERTY_DELIVERY_URI]);
+            } else {
+                foreach ($eligibility[EligibilityService::PROPERTY_DELIVERY_URI] as $id) {
+                    if (!array_key_exists($id, $deliveries)) {
+                        $deliveries[$id] = $this->getResource($id);
+                    }
                 }
             }
         }

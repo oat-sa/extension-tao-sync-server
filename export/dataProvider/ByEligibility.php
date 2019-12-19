@@ -49,7 +49,8 @@ class ByEligibility extends AbstractDataProvider
         if (!array_key_exists(Eligibility::TYPE, $params)) {
             return [];
         }
-        return $this->getDataReader()->getData($params[Eligibility::TYPE]);
+
+        return $this->getDataReader()->getData($params[Eligibility::TYPE]['resources']);
     }
 
     /**

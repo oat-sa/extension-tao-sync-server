@@ -24,6 +24,7 @@ namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 use core_kernel_classes_Resource;
 use oat\taoEncryption\Rdf\EncryptedUserRdf;
 use oat\taoEncryption\Service\EncryptionSymmetricServiceHelper;
+use Exception;
 
 class RdfEncryptDataFormatter extends RdfDataFormatter
 {
@@ -65,7 +66,7 @@ class RdfEncryptDataFormatter extends RdfDataFormatter
         }
 
         $propertiesToEncrypt = $this->getEncryptedProperties();
-        $keyEncryption = current($properties[EncryptedUserRdf::PROPERTY_ENCRYPTION_KEY]);
+        $keyEncryption = $properties[EncryptedUserRdf::PROPERTY_ENCRYPTION_KEY];
 
        foreach ($propertiesToEncrypt as $key) {
            if (array_key_exists($key, $properties)) {
@@ -75,8 +76,17 @@ class RdfEncryptDataFormatter extends RdfDataFormatter
         return $properties;
     }
 
-    public function encryptProperty(array $values, $keyEncryption)
+    /**
+     * @param array|string $values
+     * @param string $keyEncryption
+     * @return array|string
+     * @throws Exception
+     */
+    public function encryptProperty($values, $keyEncryption)
     {
+        if (!is_array($values)) {
+            return base64_encode($this->getEncryptionService($keyEncryption)->encrypt($values));
+        }
         $encrypted = [];
         foreach ($values as $value) {
             $encrypted[] = base64_encode($this->getEncryptionService($keyEncryption)->encrypt($value));

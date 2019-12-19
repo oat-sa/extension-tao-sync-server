@@ -40,9 +40,14 @@ class TestTaker extends AbstractDataReader
             if (!array_key_exists(EligibilityService::PROPERTY_TESTTAKER_URI, $eligibility)) {
                 throw new SyncDataProviderException('Invalid eligibility data for testTaker data provider');
             }
-            foreach ($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI] as $id) {
-                if (!array_key_exists($id, $testTakers)) {
-                    $testTakers[$id] = $this->getResource($id);
+            if (!is_array($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI])) {
+                $testTakers[$eligibility[EligibilityService::PROPERTY_TESTTAKER_URI]]
+                    = $this->getResource($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI]);
+            } else {
+                foreach ($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI] as $id) {
+                    if (!array_key_exists($id, $testTakers)) {
+                        $testTakers[$id] = $this->getResource($id);
+                    }
                 }
             }
         }

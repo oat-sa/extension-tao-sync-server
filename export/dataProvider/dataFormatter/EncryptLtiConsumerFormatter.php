@@ -49,7 +49,7 @@ class EncryptLtiConsumerFormatter extends RdfDataFormatter
 
         if (!empty($properties[EncryptedLtiConsumer::PROPERTY_CUSTOMER_APP_KEY])) {
             $properties[EncryptedLtiConsumer::PROPERTY_ENCRYPTED_APPLICATION_KEY]
-                = $this->encryptCustomerAppKey(current($properties[EncryptedLtiConsumer::PROPERTY_CUSTOMER_APP_KEY]));
+                = $this->encryptCustomerAppKey($properties[EncryptedLtiConsumer::PROPERTY_CUSTOMER_APP_KEY]);
 
             unset($properties[EncryptedLtiConsumer::PROPERTY_CUSTOMER_APP_KEY]);
         }
