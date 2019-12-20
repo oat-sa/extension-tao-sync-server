@@ -49,7 +49,7 @@ class RdfDataFormatterTest extends TestCase
         );
 
         $this->assertEquals(
-            ['predicate' => 'value', 'id' => 'uri'],
+            ['predicate' => 'value', 'uri' => 'uri'],
             $rdfDataFormatter->format($resourceMock)
         );
     }

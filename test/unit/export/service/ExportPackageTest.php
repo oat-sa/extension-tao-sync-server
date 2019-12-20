@@ -36,10 +36,7 @@ class ExportPackageTest extends TestCase
             ->with(['orgID' => 33])
             ->willReturn(['key' => 'data']);
 
-        $syncPackageService->expects($this->once())
-            ->method('createPackage')
-            ->with(['key' => 'data'], 'syncPackageServer_1.json');
-
+        $syncPackageService->expects($this->once())->method('createPackage');
 
         $exportPackage = (new ExportPackage())->setServiceLocator($this->getServiceLocatorMock(
             [
@@ -47,6 +44,6 @@ class ExportPackageTest extends TestCase
                 'taoSync/SyncPackageService' => $syncPackageService
             ]
         ));
-        $exportPackage->createPackage(1, 33);
+        $exportPackage->createPackage(33);
     }
 }
