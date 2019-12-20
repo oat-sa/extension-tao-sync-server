@@ -34,7 +34,6 @@ use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
 use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
-use oat\taoSyncServer\export\dataProvider\dataFormatter\DeliveryDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\EncryptLtiConsumerFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfEncryptDataFormatter;
@@ -85,7 +84,7 @@ class RegisterDataProviders extends InstallAction
 
         $deliveryDataProvider = new ByEligibility([
             ByEligibility::OPTION_READER => new Delivery(),
-            ByEligibility::OPTION_FORMATTER => new DeliveryDataFormatter(
+            ByEligibility::OPTION_FORMATTER => new RdfDataFormatter(
                 [
                     RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
                         TaoOntology::PROPERTY_UPDATED_AT,
@@ -141,7 +140,11 @@ class RegisterDataProviders extends InstallAction
                         EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_SERVICE
                         => EncryptionSymmetricService::SERVICE_ID,
                         EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE
-                        => FileKeyProviderService::SERVICE_ID
+                        => FileKeyProviderService::SERVICE_ID,
+                        RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
+                            TaoOntology::PROPERTY_UPDATED_AT,
+                            Entity::CREATED_AT
+                        ]
                     ]
                 )
             ]),
