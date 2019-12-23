@@ -37,7 +37,10 @@ class TestTaker extends AbstractDataReader
         $testTakers = [];
         foreach ($eligibilityData as $eligibility) {
 
-            if (!array_key_exists(EligibilityService::PROPERTY_TESTTAKER_URI, $eligibility)) {
+            if (
+                !is_array($eligibility)
+                || !array_key_exists(EligibilityService::PROPERTY_TESTTAKER_URI, $eligibility)
+            ) {
                 throw new SyncDataProviderException('Invalid eligibility data for testTaker data provider');
             }
             if (!is_array($eligibility[EligibilityService::PROPERTY_TESTTAKER_URI])) {
