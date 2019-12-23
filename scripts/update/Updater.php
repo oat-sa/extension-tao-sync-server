@@ -26,7 +26,6 @@ use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
-use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
