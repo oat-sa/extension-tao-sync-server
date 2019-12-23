@@ -26,7 +26,7 @@ use oat\taoEncryption\Rdf\EncryptedUserRdf;
 use oat\taoEncryption\Service\EncryptionSymmetricServiceHelper;
 use Exception;
 
-class RdfEncryptDataFormatter extends RdfDataFormatter
+class EncryptedUserRdfFormatter extends RdfDataFormatter
 {
     use EncryptionSymmetricServiceHelper;
 

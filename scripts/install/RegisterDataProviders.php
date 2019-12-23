@@ -28,7 +28,6 @@ use oat\tao\model\TaoOntology;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
-use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Entity;
@@ -36,7 +35,7 @@ use oat\taoSyncServer\export\dataProvider\ByEligibility;
 use oat\taoSyncServer\export\dataProvider\ByTestCenter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\EncryptLtiConsumerFormatter;
 use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfDataFormatter;
-use oat\taoSyncServer\export\dataProvider\dataFormatter\RdfEncryptDataFormatter;
+use oat\taoSyncServer\export\dataProvider\dataFormatter\EncryptedUserRdfFormatter;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
 use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\dataReader\Eligibility;
@@ -72,9 +71,9 @@ class RegisterDataProviders extends InstallAction
         $defaultEncryptFormatterOptions = array_merge(
             $defaultFormatterOptions,
             [
-                RdfEncryptDataFormatter::OPTION_ENCRYPTION_SERVICE => EncryptionSymmetricService::SERVICE_ID,
-                RdfEncryptDataFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE => SimpleKeyProviderService::SERVICE_ID,
-                RdfEncryptDataFormatter::OPTION_ENCRYPTED_PROPERTIES => [
+                EncryptedUserRdfFormatter::OPTION_ENCRYPTION_SERVICE => EncryptionSymmetricService::SERVICE_ID,
+                EncryptedUserRdfFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE => SimpleKeyProviderService::SERVICE_ID,
+                EncryptedUserRdfFormatter::OPTION_ENCRYPTED_PROPERTIES => [
                     OntologyRdfs::RDFS_LABEL,
                     GenerisRdf::PROPERTY_USER_FIRSTNAME,
                     GenerisRdf::PROPERTY_USER_LASTNAME,
@@ -102,7 +101,7 @@ class RegisterDataProviders extends InstallAction
 
         $testTakerDataProvider = new ByEligibility([
             ByEligibility::OPTION_READER => new TestTaker(),
-            ByEligibility::OPTION_FORMATTER => new RdfEncryptDataFormatter(
+            ByEligibility::OPTION_FORMATTER => new EncryptedUserRdfFormatter(
                 array_merge(
                     $defaultEncryptFormatterOptions,
                     [RdfDataFormatter::OPTION_ROOT_CLASS => TestTakerService::CLASS_URI_SUBJECT]
@@ -120,11 +119,11 @@ class RegisterDataProviders extends InstallAction
                     ]),
                     TestCenterAdministrator::TYPE => new ByTestCenter([
                         ByTestCenter::OPTION_READER => new TestCenterAdministrator(),
-                        ByTestCenter::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
+                        ByTestCenter::OPTION_FORMATTER => new EncryptedUserRdfFormatter($defaultEncryptFormatterOptions)
                     ]),
                     Proctor::TYPE => new ByTestCenter([
                         ByTestCenter::OPTION_READER => new Proctor(),
-                        ByTestCenter::OPTION_FORMATTER => new RdfEncryptDataFormatter($defaultEncryptFormatterOptions)
+                        ByTestCenter::OPTION_FORMATTER => new EncryptedUserRdfFormatter($defaultEncryptFormatterOptions)
                     ]),
                 ],
                 ByTestCenter::OPTION_FORMATTER => new RdfDataFormatter(
@@ -140,7 +139,7 @@ class RegisterDataProviders extends InstallAction
                         EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_SERVICE
                         => EncryptionSymmetricService::SERVICE_ID,
                         EncryptLtiConsumerFormatter::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE
-                        => FileKeyProviderService::SERVICE_ID,
+                        => SimpleKeyProviderService::SERVICE_ID,
                         RdfDataFormatter::OPTION_EXCLUDED_FIELDS => [
                             TaoOntology::PROPERTY_UPDATED_AT,
                             Entity::CREATED_AT

@@ -22,14 +22,16 @@
 namespace oat\taoSyncServer\export\dataProvider\dataFormatter;
 
 use core_kernel_classes_Resource;
+use Exception;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
+use oat\taoEncryption\Service\EncryptionSymmetricServiceHelper;
 use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
-use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
 use oat\taoEncryption\Service\LtiConsumer\EncryptedLtiConsumer;
-use oat\taoSync\model\Exception\SyncDataProviderException;
 
 class EncryptLtiConsumerFormatter extends RdfDataFormatter
 {
+    use EncryptionSymmetricServiceHelper;
+
     const SERVICE_ID = 'taoEncryption/encryptLtiConsumer';
 
     const OPTION_ENCRYPTION_SERVICE = 'encryptionService';
@@ -41,7 +43,7 @@ class EncryptLtiConsumerFormatter extends RdfDataFormatter
     /**
      * @param core_kernel_classes_Resource $resource
      * @return array
-     * @throws SyncDataProviderException
+     * @throws Exception
      */
     public function formatResource(core_kernel_classes_Resource $resource)
     {
@@ -61,57 +63,34 @@ class EncryptLtiConsumerFormatter extends RdfDataFormatter
     /**
      * @param string $customerAppKey
      * @return string
-     * @throws SyncDataProviderException
+     * @throws Exception
      */
     protected function encryptCustomerAppKey($customerAppKey)
     {
-        /** @var SimpleKeyProviderService $keyProvider */
-        $keyProvider = $this->getServiceLocator()->get(SimpleKeyProviderService::SERVICE_ID);
-        $keyProvider->setKey($customerAppKey);
-
-        $this->getEncryptionService()->setKeyProvider($keyProvider);
-
-        return base64_encode($this->getEncryptionService()->encrypt($this->getApplicationKey()));
+        return base64_encode($this->getEncryptionService($customerAppKey)->encrypt($this->getApplicationKey()));
     }
 
     /**
      * @return string
-     * @throws SyncDataProviderException
      */
     protected function getApplicationKey()
     {
-        if (!$this->hasOption(static::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE)) {
-            throw new SyncDataProviderException(
-                'Invalid EncryptLtiConsumerFormatter configuration: key provider missing'
-            );
-        }
-
-        /** @var FileKeyProviderService $keyProvider */
-        $keyProvider = $this->getServiceLocator()->get(
-            $this->getOption(static::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE)
-        );
-
-        return $keyProvider->getKeyFromFileSystem();
+        return $this->getServiceLocator()->get(FileKeyProviderService::SERVICE_ID)->getKeyFromFileSystem();
     }
 
     /**
-     * @return array|EncryptionSymmetricService|object
-     * @throws SyncDataProviderException
+     * @inheritdoc
      */
-    protected function getEncryptionService()
+    protected function getOptionEncryptionService()
     {
-        if (is_null($this->encryptionService)) {
-            $service = $this->getServiceLocator()->get(
-                $this->getOption(static::OPTION_ENCRYPTION_SERVICE)
-            );
-            if (!$service instanceof EncryptionSymmetricService) {
-                throw new SyncDataProviderException(
-                    'Encryption Service must be instance of EncryptionSymmetricService'
-                );
-            }
+        return $this->getOption(static::OPTION_ENCRYPTION_SERVICE);
+    }
 
-            $this->encryptionService = $service;
-        }
-        return $this->encryptionService;
+    /**
+     * @inheritdoc
+     */
+    protected function getOptionEncryptionKeyProvider()
+    {
+        return $this->getOption(static::OPTION_ENCRYPTION_KEY_PROVIDER_SERVICE);
     }
 }
