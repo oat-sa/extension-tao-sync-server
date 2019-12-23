@@ -46,7 +46,7 @@ class ByEligibility extends AbstractDataProvider
      */
     public function getResources(array $params)
     {
-        if (!array_key_exists(Eligibility::TYPE, $params)) {
+        if (!array_key_exists(Eligibility::TYPE, $params) || !$params[Eligibility::TYPE]['resources']) {
             return [];
         }
 

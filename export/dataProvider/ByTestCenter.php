@@ -45,7 +45,7 @@ class ByTestCenter extends AbstractDataProvider
      */
     public function getResources(array $params)
     {
-        if (!array_key_exists(TestCenter::TYPE, $params) || !$params[TestCenter::TYPE]) {
+        if (!array_key_exists(TestCenter::TYPE, $params) || !$params[TestCenter::TYPE]['resources']) {
             throw new SyncDataProviderException('Test center is missing');
         }
         return $this->getDataReader()->getData(current($params[TestCenter::TYPE]['resources']));
