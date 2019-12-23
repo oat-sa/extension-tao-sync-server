@@ -25,7 +25,6 @@ use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
 use oat\taoSync\model\Exception\SyncDataProviderException;
 use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
-use oat\taoSyncServer\export\dataProvider\dataReader\TestCenterAdministrator;
 
 class ProctorTest extends TestCase
 {

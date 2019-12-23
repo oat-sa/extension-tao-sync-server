@@ -48,6 +48,7 @@ class ByTestCenter extends AbstractDataProvider
         if (!array_key_exists(TestCenter::TYPE, $params) || !$params[TestCenter::TYPE]['resources']) {
             throw new SyncDataProviderException('Test center is missing');
         }
+
         return $this->getDataReader()->getData(current($params[TestCenter::TYPE]['resources']));
     }
 
@@ -62,7 +63,6 @@ class ByTestCenter extends AbstractDataProvider
         if (!$reader instanceof AbstractDataReader) {
             throw new SyncDataProviderException('Invalid data reader for ' . __CLASS__);
         }
-
         return $this->propagate($reader);
     }
 }
