@@ -41,7 +41,7 @@ class EncryptedUserRdfFormatter extends RdfDataFormatter
      */
     protected function getEncryptedProperties()
     {
-        return $this->getOption(self::OPTION_ENCRYPTED_PROPERTIES);
+        return $this->getOption(self::OPTION_ENCRYPTED_PROPERTIES) ?? [];
     }
 
     /**
