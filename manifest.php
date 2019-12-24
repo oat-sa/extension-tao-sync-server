@@ -19,6 +19,7 @@
  *
  */
 
+use oat\taoSyncServer\scripts\install\RegisterDataProviders;
 use oat\taoSyncServer\scripts\update\Updater;
 use oat\taoSync\model\SyncService;
 
@@ -30,14 +31,20 @@ return [
     'label' => 'Tao Sync Central Server',
     'description' => 'TAO central server for synchronisation.',
     'license' => 'GPL-2.0',
-    'version' => '0.1.0',
+    'version' => '0.2.0',
     'author' => 'Open Assessment Technologies SA',
-    'requires' => [],
+    'requires' => array(
+        'taoSync' => '>=7.1.0',
+    ),
     'managementRole' => SyncService::TAO_SYNC_ROLE,
     'acl' => [
         ['grant', SyncService::TAO_SYNC_ROLE, ['ext' => 'taoSyncServer']],
     ],
-    'install' => [],
+    'install'        => [
+        'php' => [
+            RegisterDataProviders::class,
+        ]
+    ],
     'uninstall' => [],
     'update' => Updater::class,
     'routes' => [],
