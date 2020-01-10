@@ -23,6 +23,7 @@ namespace oat\taoSyncServer\scripts\update;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\tao\model\TaoOntology;
+use oat\taoDeliveryRdf\model\assembly\CompiledTestConverterFactory;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
@@ -41,6 +42,7 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
 use oat\taoSyncServer\export\dataProvider\LtiConsumer;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
+use oat\taoSyncServer\export\service\ExportDeliveryAssembly;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
 
@@ -142,6 +144,16 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
             $this->setVersion('0.2.0');
+        }
+
+        if ($this->isVersion('0.2.0')) {
+            $service = new ExportDeliveryAssembly([
+                ExportDeliveryAssembly::OPTION_ENCRYPTION_ALGORITHM => 'AES',
+                ExportDeliveryAssembly::OPTION_OUTPUT_TEST_FORMAT => CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML
+            ]);
+
+            $this->getServiceManager()->register(ExportDeliveryAssembly::SERVICE_ID, $service);
+            $this->setVersion('0.3.0');
         }
     }
 }
