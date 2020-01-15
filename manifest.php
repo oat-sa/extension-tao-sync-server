@@ -44,7 +44,6 @@ return [
     'install'        => [
         'php' => [
             RegisterDataProviders::class,
-            RegisterExportDeliveryAssembly::class,
         ]
     ],
     'uninstall' => [],

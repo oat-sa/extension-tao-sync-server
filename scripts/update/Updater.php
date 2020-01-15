@@ -145,15 +145,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
             $this->setVersion('0.2.0');
         }
-
-        if ($this->isVersion('0.2.0')) {
-            $service = new ExportDeliveryAssembly([
-                ExportDeliveryAssembly::OPTION_ENCRYPTION_ALGORITHM => 'AES',
-                ExportDeliveryAssembly::OPTION_OUTPUT_TEST_FORMAT => CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML
-            ]);
-
-            $this->getServiceManager()->register(ExportDeliveryAssembly::SERVICE_ID, $service);
-            $this->setVersion('0.3.0');
-        }
+        $this->skip('0.2.0', '0.3.0');
     }
 }
