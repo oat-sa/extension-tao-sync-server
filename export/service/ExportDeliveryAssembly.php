@@ -39,30 +39,48 @@ class ExportDeliveryAssembly extends ConfigurableService
 
     const ENCRYPTION_ALGORITHM = 'AES';
     const OUTPUT_TEST_FORMAT = CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML;
+    const ASSEMBLY_STORAGE_NAME = 'assembly';
 
     /**
      * @param array $deliveryUris
-     * @param string $orgId
      * @throws SyncBaseException
      */
-    public function createCompiledDeliveryPackage(array $deliveryUris, $orgId)
+    public function createCompiledDeliveryPackage(array $deliveryUris)
     {
         try {
             $assembler = $this->getAssembler();
 
             foreach ($deliveryUris as $deliveryUri) {
+                $assemblerFile = $this->getPackageService()->getSyncDirectory()
+                    ->getDirectory(self::ASSEMBLY_STORAGE_NAME)
+                    ->getFile($this->getAssemblerFileName($deliveryUri));
+
+                if($assemblerFile->exists()) {
+                    continue;
+                }
+
                 $exportedAssemblyPath = $assembler->exportCompiledDelivery(
                     $this->getResource($deliveryUri),
                     self::OUTPUT_TEST_FORMAT
                 );
 
-                if (!$this->getPackageService()->moveLocalFile($exportedAssemblyPath, $orgId)) {
+                if (!$assemblerFile->write(file_get_contents($exportedAssemblyPath))) {
                     throw new Exception(sprintf('CompiledDeliveryPackage for %s not created', $deliveryUri));
                 }
+                unlink($exportedAssemblyPath);
             }
         } catch (Exception $e) {
             throw new SyncBaseException($e->getMessage());
         }
+    }
+
+    /**
+     * @param string $deliveryUri
+     * @return string
+     */
+    private function getAssemblerFileName($deliveryUri)
+    {
+        return str_replace('/', '_', $deliveryUri) . '.zip';
     }
 
     /**
