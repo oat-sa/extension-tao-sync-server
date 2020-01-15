@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2019  (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020  (original work) Open Assessment Technologies SA;
  *
  * @author Yuri Filippovich
  */
@@ -24,40 +24,21 @@ namespace oat\taoSyncServer\export\service;
 use Exception;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\service\ConfigurableService;
+use oat\taoDeliveryRdf\model\assembly\CompiledTestConverterFactory;
 use oat\taoDeliveryRdf\model\export\AssemblyExporterService;
 use oat\taoEncryption\Service\DeliveryAssembly\EncryptedAssemblyFilesReaderDecorator;
 use oat\taoEncryption\Service\EncryptionServiceFactory;
 use oat\taoEncryption\Service\EncryptionServiceInterface;
 use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoSync\model\Exception\SyncBaseException;
-use oat\taoSync\model\Exception\SyncPackageException;
 use oat\taoSync\package\SyncPackageService;
 
 class ExportDeliveryAssembly extends ConfigurableService
 {
     use OntologyAwareTrait;
 
-    const SERVICE_ID = 'taoSyncServer/ExportDeliveryAssembly';
-
-    const OPTION_ENCRYPTION_ALGORITHM = 'taoSync/encryptionAlgorithm';
-    const OPTION_OUTPUT_TEST_FORMAT = 'taoSync/outputTestFormat';
-
-    /**
-     * @param array $options
-     * @throws SyncPackageException
-     */
-    public function __construct($options = array())
-    {
-        parent::__construct($options);
-
-        if (!$this->hasOption(self::OPTION_ENCRYPTION_ALGORITHM)) {
-            throw new SyncPackageException('encryptionAlgorithm not set for ExportDeliveryAssembly service');
-        }
-
-        if (!$this->hasOption(self::OPTION_OUTPUT_TEST_FORMAT)) {
-            throw new SyncPackageException('outputTestFormat not set for ExportDeliveryAssembly service');
-        }
-    }
+    const ENCRYPTION_ALGORITHM = 'AES';
+    const OUTPUT_TEST_FORMAT = CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML;
 
     /**
      * @param array $deliveryUris
@@ -72,7 +53,7 @@ class ExportDeliveryAssembly extends ConfigurableService
             foreach ($deliveryUris as $deliveryUri) {
                 $exportedAssemblyPath = $assembler->exportCompiledDelivery(
                     $this->getResource($deliveryUri),
-                    $this->getOption(self::OPTION_OUTPUT_TEST_FORMAT)
+                    self::OUTPUT_TEST_FORMAT
                 );
 
                 if (!$this->getPackageService()->moveLocalFile($exportedAssemblyPath, $orgId)) {
@@ -92,7 +73,7 @@ class ExportDeliveryAssembly extends ConfigurableService
     {
         return $this->getAssemblyExporter(
             (new EncryptionServiceFactory())->createSymmetricService(
-                $this->getOption(self::OPTION_ENCRYPTION_ALGORITHM),
+                self::ENCRYPTION_ALGORITHM,
                 $this->getServiceManager()->get(FileKeyProviderService::SERVICE_ID)->getKeyFromFileSystem()
             )
         );

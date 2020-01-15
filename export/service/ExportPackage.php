@@ -87,6 +87,6 @@ class ExportPackage extends ConfigurableService
      */
     private function getExportDeliveryAssemblyService()
     {
-        return $this->getServiceLocator()->get(ExportDeliveryAssembly::SERVICE_ID);
+        return $this->getServiceLocator()->get(ExportDeliveryAssembly::class);
     }
 }
