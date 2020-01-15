@@ -49,11 +49,10 @@ class ExportDeliveryAssembly extends ConfigurableService
     {
         try {
             $assembler = $this->getAssembler();
+            $directory = $this->getPackageService()->getSyncDirectory()->getDirectory(self::ASSEMBLY_STORAGE_NAME);
 
             foreach ($deliveryUris as $deliveryUri) {
-                $assemblerFile = $this->getPackageService()->getSyncDirectory()
-                    ->getDirectory(self::ASSEMBLY_STORAGE_NAME)
-                    ->getFile($this->getAssemblerFileName($deliveryUri));
+                $assemblerFile = $directory->getFile($this->getAssemblerFileName($deliveryUri));
 
                 if($assemblerFile->exists()) {
                     continue;
@@ -92,7 +91,7 @@ class ExportDeliveryAssembly extends ConfigurableService
         return $this->getAssemblyExporter(
             (new EncryptionServiceFactory())->createSymmetricService(
                 self::ENCRYPTION_ALGORITHM,
-                $this->getServiceManager()->get(FileKeyProviderService::SERVICE_ID)->getKeyFromFileSystem()
+                $this->getServiceLocator()->get(FileKeyProviderService::SERVICE_ID)->getKeyFromFileSystem()
             )
         );
     }
