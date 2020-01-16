@@ -37,7 +37,7 @@ class DeliveryAssemblyStorage extends ConfigurableService
      */
     public function getDeliveryAssemblyFile($deliveryUri)
     {
-        return $this->getDeliveryAssemblyDirectory()->getFile($this->getAssemblerFileName($deliveryUri));
+        return $this->getAssemblyDirectory()->getFile($this->getAssemblerFileName($deliveryUri));
     }
 
     /**
@@ -46,7 +46,7 @@ class DeliveryAssemblyStorage extends ConfigurableService
      */
     public function deleteDeliveryAssemblyFile($deliveryUri)
     {
-        return $this->getDeliveryAssemblyDirectory()->getFile($this->getAssemblerFileName($deliveryUri))->delete();
+        return $this->getAssemblyDirectory()->getFile($this->getAssemblerFileName($deliveryUri))->delete();
     }
 
     /**
@@ -61,7 +61,7 @@ class DeliveryAssemblyStorage extends ConfigurableService
     /**
      * @return Directory
      */
-    private function getDeliveryAssemblyDirectory()
+    private function getAssemblyDirectory()
     {
         return $this->getServiceLocator()->get(SyncPackageService::SERVICE_ID)
             ->getSyncDirectory()
