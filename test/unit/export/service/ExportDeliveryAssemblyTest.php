@@ -21,13 +21,12 @@ namespace oat\taoSyncServer\test\unit\export\service;
 
 use oat\generis\model\data\Ontology;
 use oat\generis\test\TestCase;
-use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\taoDeliveryRdf\model\assembly\AssemblyFilesReaderInterface;
 use oat\taoDeliveryRdf\model\export\AssemblyExporterService;
 use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoSync\model\Exception\SyncBaseException;
-use oat\taoSync\package\SyncPackageService;
+use oat\taoSyncServer\export\service\DeliveryAssemblyStorage;
 use oat\taoSyncServer\export\service\ExportDeliveryAssembly;
 
 class ExportDeliveryAssemblyTest extends TestCase
@@ -40,30 +39,19 @@ class ExportDeliveryAssemblyTest extends TestCase
             ->with('assembly_files_reader')
             ->willReturn($this->createMock(AssemblyFilesReaderInterface::class));
 
-        $directoryMock = $this->createMock(Directory::class);
-        $directoryMock
-            ->expects($this->once())
-            ->method('getDirectory')
-            ->with('assembly')
-            ->willReturn($directoryMock);
-
         $file1 = $this->getMockBuilder(File::class)->setConstructorArgs(['id', 'pref1'])->getMock();
         $file2 = $this->getMockBuilder(File::class)->setConstructorArgs(['id', 'pref2'])->getMock();
 
         $file1->method('exists')->willReturn(true);
         $file2->method('exists')->willReturn(false);
 
-        $directoryMock
-            ->expects($this->exactly(2))
-            ->method('getFile')
-            ->withConsecutive(['uri1.zip'], ['uri2.zip'])
-            ->willReturnOnConsecutiveCalls($file1, $file2);
+        $deliveryAssemblyStorageMock = $this->createMock(DeliveryAssemblyStorage::class);
 
-        $syncPackageServiceMock = $this->createMock(SyncPackageService::class);
-        $syncPackageServiceMock
-            ->expects($this->once())
-            ->method('getSyncDirectory')
-            ->willReturn($directoryMock);
+        $deliveryAssemblyStorageMock
+            ->expects($this->exactly(2))
+            ->method('getDeliveryAssemblyFile')
+            ->withConsecutive(['uri1'], ['uri2'])
+            ->willReturnOnConsecutiveCalls($file1, $file2);
 
         $fileKeyProviderService = $this->createMock(FileKeyProviderService::class);
         $fileKeyProviderService->method('getKeyFromFileSystem')->willReturn('key');
@@ -82,7 +70,7 @@ class ExportDeliveryAssemblyTest extends TestCase
         $service->setServiceLocator($this->getServiceLocatorMock(
             [
                 AssemblyExporterService::SERVICE_ID => $assemblyExporterServiceMock,
-                SyncPackageService::SERVICE_ID => $syncPackageServiceMock,
+                DeliveryAssemblyStorage::class => $deliveryAssemblyStorageMock,
                 FileKeyProviderService::SERVICE_ID => $fileKeyProviderService,
                 Ontology::SERVICE_ID => $ontologyMock,
             ]

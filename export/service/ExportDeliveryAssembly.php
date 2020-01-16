@@ -31,7 +31,6 @@ use oat\taoEncryption\Service\EncryptionServiceFactory;
 use oat\taoEncryption\Service\EncryptionServiceInterface;
 use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoSync\model\Exception\SyncBaseException;
-use oat\taoSync\package\SyncPackageService;
 
 class ExportDeliveryAssembly extends ConfigurableService
 {
@@ -39,7 +38,6 @@ class ExportDeliveryAssembly extends ConfigurableService
 
     const ENCRYPTION_ALGORITHM = 'AES';
     const OUTPUT_TEST_FORMAT = CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML;
-    const ASSEMBLY_STORAGE_NAME = 'assembly';
 
     /**
      * @param array $deliveryUris
@@ -49,10 +47,9 @@ class ExportDeliveryAssembly extends ConfigurableService
     {
         try {
             $assembler = $this->getAssembler();
-            $directory = $this->getPackageService()->getSyncDirectory()->getDirectory(self::ASSEMBLY_STORAGE_NAME);
 
             foreach ($deliveryUris as $deliveryUri) {
-                $assemblerFile = $directory->getFile($this->getAssemblerFileName($deliveryUri));
+                $assemblerFile = $this->getDeliveryAssemblyStorageService()->getDeliveryAssemblyFile($deliveryUri);
 
                 if($assemblerFile->exists()) {
                     continue;
@@ -71,15 +68,6 @@ class ExportDeliveryAssembly extends ConfigurableService
         } catch (Exception $e) {
             throw new SyncBaseException($e->getMessage());
         }
-    }
-
-    /**
-     * @param string $deliveryUri
-     * @return string
-     */
-    private function getAssemblerFileName($deliveryUri)
-    {
-        return str_replace('/', '_', $deliveryUri) . '.zip';
     }
 
     /**
@@ -112,10 +100,10 @@ class ExportDeliveryAssembly extends ConfigurableService
     }
 
     /**
-     * @return SyncPackageService
+     * @return DeliveryAssemblyStorage
      */
-    private function getPackageService()
+    private function getDeliveryAssemblyStorageService()
     {
-        return $this->getServiceLocator()->get(SyncPackageService::SERVICE_ID);
+        return $this->getServiceLocator()->get(DeliveryAssemblyStorage::class);
     }
 }
