@@ -49,9 +49,6 @@ use oat\taoTestTaker\models\TestTakerService;
 
 /**
  * php index.php 'oat\taoSyncServer\scripts\install\RegisterDataProviders'
- *
- * Class RegisterSyncQueueRds
- * @package oat\taoSyncClient\scripts\install
  */
 class RegisterDataProviders extends InstallAction
 {

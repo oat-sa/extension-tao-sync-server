@@ -22,10 +22,12 @@ namespace oat\taoSyncServer\scripts\update;
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\event\EventManager;
 use oat\tao\model\TaoOntology;
-use oat\taoDeliveryRdf\model\assembly\CompiledTestConverterFactory;
 use oat\taoDeliveryRdf\model\ContainerRuntime;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
+use oat\taoDeliveryRdf\model\event\DeliveryRemovedEvent;
+use oat\taoDeliveryRdf\model\event\DeliveryUpdatedEvent;
 use oat\taoEncryption\Service\EncryptionSymmetricService;
 use oat\taoEncryption\Service\KeyProvider\SimpleKeyProviderService;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
@@ -42,7 +44,7 @@ use oat\taoSyncServer\export\dataProvider\dataReader\Proctor;
 use oat\taoSyncServer\export\dataProvider\dataReader\TestTaker;
 use oat\taoSyncServer\export\dataProvider\LtiConsumer;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
-use oat\taoSyncServer\export\service\ExportDeliveryAssembly;
+use oat\taoSyncServer\listener\DeliveryListener;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
 
@@ -145,6 +147,13 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->getServiceManager()->register(SyncDataProviderCollection::SERVICE_ID, $dataProviders);
             $this->setVersion('0.2.0');
         }
-        $this->skip('0.2.0', '0.3.0');
+
+        if ($this->isVersion('0.2.0')) {
+            $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+            $eventManager->attach(DeliveryRemovedEvent::class, [DeliveryListener::class, 'deleteDeliveryAssemblyFile']);
+            $eventManager->attach(DeliveryUpdatedEvent::class, [DeliveryListener::class, 'deleteDeliveryAssemblyFile']);
+            $this->getServiceManager()->register(EventManager::SERVICE_ID, $eventManager);
+            $this->setVersion('0.3.0');
+        }
     }
 }
