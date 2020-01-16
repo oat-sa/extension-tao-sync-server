@@ -44,7 +44,7 @@ class ExportPackage extends ConfigurableService
         $fileName = self::FILE_PREFIX . '_' . time() . '.json';
 
         if ($deliveryUris = $this->getDeliveryUris($data)) {
-            $this->getExportDeliveryAssemblyService()->createCompiledDeliveryPackage($deliveryUris, $orgId);
+            $this->getExportDeliveryAssemblyService()->exportDeliveryAssemblies($deliveryUris, $orgId);
         }
 
         return $this->getPackageService()->createPackage($data, $fileName, $orgId);

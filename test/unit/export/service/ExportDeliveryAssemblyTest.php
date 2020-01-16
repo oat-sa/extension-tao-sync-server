@@ -31,7 +31,7 @@ use oat\taoSyncServer\export\service\ExportDeliveryAssembly;
 
 class ExportDeliveryAssemblyTest extends TestCase
 {
-    public function testCreateCompiledDeliveryPackage()
+    public function testExportDeliveryAssemblies()
     {
         $assemblyExporterServiceMock = $this->createMock(AssemblyExporterService::class);
         $assemblyExporterServiceMock
@@ -77,6 +77,6 @@ class ExportDeliveryAssemblyTest extends TestCase
         ));
 
         $this->expectException(SyncBaseException::class);
-        $service->createCompiledDeliveryPackage(['uri1', 'uri2']);
+        $service->exportDeliveryAssemblies(['uri1', 'uri2']);
     }
 }
