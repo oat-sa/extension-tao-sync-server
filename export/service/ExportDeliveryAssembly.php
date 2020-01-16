@@ -45,21 +45,21 @@ class ExportDeliveryAssembly extends ConfigurableService
     public function exportDeliveryAssemblies(array $deliveryUris)
     {
         try {
-            $assembler = $this->getAssembler();
+            $assemblyExporter = $this->getAssemblyExporter();
 
             foreach ($deliveryUris as $deliveryUri) {
-                $assemblerFile = $this->getDeliveryAssemblyStorageService()->getDeliveryAssemblyFile($deliveryUri);
+                $assemblyFile = $this->getDeliveryAssemblyStorageService()->getDeliveryAssemblyFile($deliveryUri);
 
-                if($assemblerFile->exists()) {
+                if($assemblyFile->exists()) {
                     continue;
                 }
 
-                $exportedAssemblyPath = $assembler->exportCompiledDelivery(
+                $exportedAssemblyPath = $assemblyExporter->exportCompiledDelivery(
                     $this->getResource($deliveryUri),
                     CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML
                 );
 
-                if (!$assemblerFile->write(fopen($exportedAssemblyPath, 'r'))) {
+                if (!$assemblyFile->write(fopen($exportedAssemblyPath, 'r'))) {
                     throw new Exception(sprintf('CompiledDeliveryPackage for %s not created', $deliveryUri));
                 }
                 tao_helpers_File::remove($exportedAssemblyPath);
@@ -73,7 +73,7 @@ class ExportDeliveryAssembly extends ConfigurableService
      * @return AssemblyExporterService
      * @throws Exception
      */
-    private function getAssembler()
+    private function getAssemblyExporter()
     {
         $assemblerService = $this->getServiceLocator()->get(AssemblyExporterService::SERVICE_ID);
         $filesReader = $assemblerService->getOption(AssemblyExporterService::OPTION_ASSEMBLY_FILES_READER);
