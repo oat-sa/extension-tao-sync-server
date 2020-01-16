@@ -46,7 +46,7 @@ class DeliveryAssemblyStorage extends ConfigurableService
      */
     public function deleteDeliveryAssemblyFile($deliveryUri)
     {
-        return $this->getAssemblyDirectory()->getFile($this->getAssemblerFileName($deliveryUri))->delete();
+        return $this->getDeliveryAssemblyFile($deliveryUri)->delete();
     }
 
     /**
