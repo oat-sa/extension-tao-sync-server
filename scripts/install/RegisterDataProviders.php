@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +77,8 @@ class RegisterDataProviders extends InstallAction
                     GenerisRdf::PROPERTY_USER_LASTNAME,
                     GenerisRdf::PROPERTY_USER_MAIL
                 ],
-            ]);
+            ]
+        );
 
         $deliveryDataProvider = new ByEligibility([
             ByEligibility::OPTION_READER => new Delivery(),

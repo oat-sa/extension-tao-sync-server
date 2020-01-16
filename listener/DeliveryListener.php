@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,6 +17,7 @@
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA ;
  */
+
 namespace oat\taoSyncServer\listener;
 
 use oat\oatbox\service\ConfigurableService;
@@ -39,7 +41,7 @@ class DeliveryListener extends ConfigurableService
             return;
         }
 
-       $this->getServiceManager()
+        $this->getServiceManager()
             ->get(DeliveryAssemblyStorage::class)
             ->deleteDeliveryAssemblyFile($eventData['delivery']);
     }

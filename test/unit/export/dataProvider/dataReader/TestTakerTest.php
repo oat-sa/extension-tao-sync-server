@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +59,8 @@ class TestTakerTest extends TestCase
                 'uri1' => $resource1,
                 'uri2' => $resource2
             ],
-            $this->service->getData($data));
+            $this->service->getData($data)
+        );
     }
 
     public function testGetDataMultiply()
@@ -81,7 +83,8 @@ class TestTakerTest extends TestCase
                 'uri3' => $resource3,
                 'uri2' => $resource2
             ],
-            $this->service->getData($data));
+            $this->service->getData($data)
+        );
     }
 
     public function testGetDataWithInvalidParameter()
@@ -93,6 +96,6 @@ class TestTakerTest extends TestCase
     public function testGetDataWithInvalidParameters()
     {
         $this->expectException(SyncDataProviderException::class);
-        (new TestTaker())->getData([['key'=> 'value']]);
+        (new TestTaker())->getData([['key' => 'value']]);
     }
 }

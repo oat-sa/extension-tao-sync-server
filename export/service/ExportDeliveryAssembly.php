@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +51,7 @@ class ExportDeliveryAssembly extends ConfigurableService
             foreach ($deliveryUris as $deliveryUri) {
                 $assemblyFile = $this->getDeliveryAssemblyStorageService()->getDeliveryAssemblyFile($deliveryUri);
 
-                if($assemblyFile->exists()) {
+                if ($assemblyFile->exists()) {
                     continue;
                 }
 
