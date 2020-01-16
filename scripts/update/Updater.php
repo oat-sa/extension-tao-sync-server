@@ -151,10 +151,13 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         if ($this->isVersion('0.2.0')) {
-            $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-            $eventManager->attach(DeliveryRemovedEvent::class, [DeliveryListener::class, 'deleteDeliveryAssemblyFile']);
-            $eventManager->attach(DeliveryUpdatedEvent::class, [DeliveryListener::class, 'deleteDeliveryAssemblyFile']);
-            $this->getServiceManager()->register(EventManager::SERVICE_ID, $eventManager);
+            $serviceManager = $this->getServiceManager();
+            $serviceManager->register(DeliveryListener::SERVICE_ID, new DeliveryListener());
+
+            $eventManager = $serviceManager->get(EventManager::SERVICE_ID);
+            $eventManager->attach(DeliveryRemovedEvent::class, [DeliveryListener::SERVICE_ID, 'deleteDeliveryAssemblyFile']);
+            $eventManager->attach(DeliveryUpdatedEvent::class, [DeliveryListener::SERVICE_ID, 'deleteDeliveryAssemblyFile']);
+            $serviceManager->register(EventManager::SERVICE_ID, $eventManager);
             $this->setVersion('0.3.0');
         }
     }
