@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,7 @@ use oat\oatbox\service\ConfigurableService;
 use oat\taoSync\model\dataProvider\SyncDataProviderCollection;
 use oat\taoSync\model\Exception\SyncBaseException;
 use oat\taoSync\package\SyncPackageService;
+use oat\taoSyncServer\export\dataProvider\dataReader\Delivery;
 use oat\taoSyncServer\export\dataProvider\TestCenter;
 
 class ExportPackage extends ConfigurableService
@@ -42,7 +44,27 @@ class ExportPackage extends ConfigurableService
 
         $fileName = self::FILE_PREFIX . '_' . time() . '.json';
 
+        if ($deliveryUris = $this->getDeliveryUris($data)) {
+            $this->getExportDeliveryAssemblyService()->exportDeliveryAssemblies($deliveryUris, $orgId);
+        }
+
         return $this->getPackageService()->createPackage($data, $fileName, $orgId);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function getDeliveryUris(array $data)
+    {
+        $deliveryUris = [];
+
+        if (array_key_exists(Delivery::TYPE, $data)) {
+            foreach ($data[Delivery::TYPE]['resources'] as $delivery) {
+                $deliveryUris[] = $delivery['uri'];
+            }
+        }
+        return $deliveryUris;
     }
 
     /**
@@ -59,5 +81,13 @@ class ExportPackage extends ConfigurableService
     private function getPackageService()
     {
         return $this->getServiceLocator()->get(SyncPackageService::SERVICE_ID);
+    }
+
+    /**
+     * @return ExportDeliveryAssembly
+     */
+    private function getExportDeliveryAssemblyService()
+    {
+        return $this->getServiceLocator()->get(ExportDeliveryAssembly::class);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +54,8 @@ class RdfDataFormatter extends AbstractDataFormatter
 
         if ($classesToExport) {
             $data['classes'] = $this->getFormattedClasses(
-                $classesToExport, $this->getOption(self::OPTION_ROOT_CLASS)
+                $classesToExport,
+                $this->getOption(self::OPTION_ROOT_CLASS)
             );
         }
 
@@ -82,7 +84,7 @@ class RdfDataFormatter extends AbstractDataFormatter
         foreach ($classesToExport as $class) {
             $class = $this->getClass($class);
             foreach ($class->getParentClasses(true) as $parent) {
-                if($parent->getUri() == $rootClass || array_key_exists($parent->getUri(), $classesToExport)) {
+                if ($parent->getUri() == $rootClass || array_key_exists($parent->getUri(), $classesToExport)) {
                     break;
                 }
                 $classesToExport[$parent->getUri()] = $parent->getUri();

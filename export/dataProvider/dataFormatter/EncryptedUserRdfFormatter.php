@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,18 +62,18 @@ class EncryptedUserRdfFormatter extends RdfDataFormatter
      */
     public function encryptProperties(array $properties)
     {
-        if (!isset($properties[EncryptedUserRdf::PROPERTY_ENCRYPTION_KEY])){
+        if (!isset($properties[EncryptedUserRdf::PROPERTY_ENCRYPTION_KEY])) {
             return $properties;
         }
 
         $propertiesToEncrypt = $this->getEncryptedProperties();
         $keyEncryption = $properties[EncryptedUserRdf::PROPERTY_ENCRYPTION_KEY];
 
-       foreach ($propertiesToEncrypt as $key) {
-           if (array_key_exists($key, $properties)) {
-               $properties[$key] = $this->encryptProperty($properties[$key], $keyEncryption);
-           }
-       }
+        foreach ($propertiesToEncrypt as $key) {
+            if (array_key_exists($key, $properties)) {
+                $properties[$key] = $this->encryptProperty($properties[$key], $keyEncryption);
+            }
+        }
         return $properties;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,7 @@
  *
  */
 
+use oat\taoSyncServer\scripts\install\RegisterDeliveryEvents;
 use oat\taoSyncServer\scripts\install\RegisterDataProviders;
 use oat\taoSyncServer\scripts\update\Updater;
 use oat\taoSync\model\SyncService;
@@ -31,10 +33,10 @@ return [
     'label' => 'Tao Sync Central Server',
     'description' => 'TAO central server for synchronisation.',
     'license' => 'GPL-2.0',
-    'version' => '0.2.0',
+    'version' => '0.3.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'taoSync' => '>=7.1.0',
+        'taoSync' => '>=7.2.0',
     ),
     'managementRole' => SyncService::TAO_SYNC_ROLE,
     'acl' => [
@@ -43,6 +45,7 @@ return [
     'install'        => [
         'php' => [
             RegisterDataProviders::class,
+            RegisterDeliveryEvents::class,
         ]
     ],
     'uninstall' => [],
