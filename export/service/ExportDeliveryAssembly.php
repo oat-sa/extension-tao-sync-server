@@ -30,6 +30,7 @@ use oat\taoEncryption\Service\DeliveryAssembly\EncryptedAssemblyFilesReaderDecor
 use oat\taoEncryption\Service\EncryptionServiceFactory;
 use oat\taoEncryption\Service\KeyProvider\FileKeyProviderService;
 use oat\taoSync\model\Exception\SyncBaseException;
+use tao_helpers_File;
 
 class ExportDeliveryAssembly extends ConfigurableService
 {
@@ -58,10 +59,10 @@ class ExportDeliveryAssembly extends ConfigurableService
                     CompiledTestConverterFactory::COMPILED_TEST_FORMAT_XML
                 );
 
-                if (!$assemblerFile->write(file_get_contents($exportedAssemblyPath))) {
+                if (!$assemblerFile->write(fopen($exportedAssemblyPath, 'r'))) {
                     throw new Exception(sprintf('CompiledDeliveryPackage for %s not created', $deliveryUri));
                 }
-                unlink($exportedAssemblyPath);
+                tao_helpers_File::remove($exportedAssemblyPath);
             }
         } catch (Exception $e) {
             throw new SyncBaseException($e->getMessage());
