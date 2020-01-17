@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +37,6 @@ class TestTaker extends AbstractDataReader
     {
         $testTakers = [];
         foreach ($eligibilityData as $eligibility) {
-
             if (
                 !is_array($eligibility)
                 || !array_key_exists(EligibilityService::PROPERTY_TESTTAKER_URI, $eligibility)
