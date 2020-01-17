@@ -23,7 +23,6 @@
 use oat\taoSyncServer\scripts\install\RegisterDeliveryEvents;
 use oat\taoSyncServer\scripts\install\RegisterDataProviders;
 use oat\taoSyncServer\scripts\update\Updater;
-use oat\taoSync\model\SyncService;
 
 /**
  * Generated using taoDevTools 6.1.0
@@ -33,15 +32,15 @@ return [
     'label' => 'Tao Sync Central Server',
     'description' => 'TAO central server for synchronisation.',
     'license' => 'GPL-2.0',
-    'version' => '0.3.0',
+    'version' => '0.3.1',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
         'taoSync' => '>=7.2.0',
     ),
-    'managementRole' => SyncService::TAO_SYNC_ROLE,
-    'acl' => [
-        ['grant', SyncService::TAO_SYNC_ROLE, ['ext' => 'taoSyncServer']],
-    ],
+    'managementRole' => 'http://www.tao.lu/Ontologies/generis.rdf#taoSyncServerManager',
+    'acl'            => array(
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#taoSyncServerManager', array('ext' => 'taoSyncServer')),
+    ),
     'install'        => [
         'php' => [
             RegisterDataProviders::class,
