@@ -33,7 +33,7 @@ class LtiConsumerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $ontologyMock = $this->getMock(Ontology::class);
+        $ontologyMock = $this->createMock(Ontology::class);
 
         $service = new LtiConsumer();
         $service->setServiceLocator($this->getServiceLocatorMock([Ontology::SERVICE_ID => $ontologyMock]));

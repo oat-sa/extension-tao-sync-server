@@ -39,7 +39,7 @@ class DeliveryAssemblyStorageTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class DeliveryAssemblyStorageTest extends TestCase
 
         $syncDirectoryMock->method('getDirectory')->with('assembly')->willReturn($this->assemblyDirectoryMock);
 
-        $syncPackageServiceMock = $this->getMock(SyncPackageService::class);
+        $syncPackageServiceMock = $this->createMock(SyncPackageService::class);
         $syncPackageServiceMock->method('getSyncDirectory')->willReturn($syncDirectoryMock);
 
         $this->service = new DeliveryAssemblyStorage();

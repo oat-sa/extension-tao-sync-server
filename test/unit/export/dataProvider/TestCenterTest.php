@@ -39,8 +39,8 @@ class TestCenterTest extends TestCase
             ->getMock();
 
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)->disableOriginalConstructor()->getMock();
-        $query = $this->getMock(Query::class);
-        $searchGateWay = $this->getMock(SearchGateWayInterface::class);
+        $query = $this->createMock(Query::class);
+        $searchGateWay = $this->createMock(SearchGateWayInterface::class);
 
         $testCenter = new core_kernel_classes_Resource('testCenter');
         $result = new ResultSet([$testCenter], 1);
