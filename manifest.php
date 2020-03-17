@@ -36,6 +36,7 @@ return [
     'version' => '0.4.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
+        'generis' => '>=12.15.0',
         'taoSync' => '>=7.2.0',
     ),
     'managementRole' => SyncService::TAO_SYNC_ROLE,
