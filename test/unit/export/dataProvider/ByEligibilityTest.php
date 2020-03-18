@@ -29,10 +29,10 @@ class ByEligibilityTest extends TestCase
 {
     public function testGetResources()
     {
-        $eligibilityReaderMock = $this->getMock(Eligibility::class);
+        $eligibilityReaderMock = $this->createMock(Eligibility::class);
         $service = new ByEligibility(['reader' => $eligibilityReaderMock]);
         $service->setServiceLocator($this->getServiceLocatorMock(
-            [LoggerService::SERVICE_ID => $this->getMock(LoggerService::class)]
+            [LoggerService::SERVICE_ID => $this->createMock(LoggerService::class)]
         ));
 
         $eligibilityReaderMock->expects($this->once())

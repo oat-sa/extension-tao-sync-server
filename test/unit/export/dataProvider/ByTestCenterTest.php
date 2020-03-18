@@ -30,10 +30,10 @@ class ByTestCenterTest extends TestCase
 {
     public function testGetResources()
     {
-        $readerMock = $this->getMock(AbstractDataReader::class);
+        $readerMock = $this->createMock(AbstractDataReader::class);
         $service = new ByTestCenter(['reader' => $readerMock]);
         $service->setServiceLocator($this->getServiceLocatorMock(
-            [LoggerService::SERVICE_ID => $this->getMock(LoggerService::class)]
+            [LoggerService::SERVICE_ID => $this->createMock(LoggerService::class)]
         ));
 
         $readerMock->expects($this->once())
