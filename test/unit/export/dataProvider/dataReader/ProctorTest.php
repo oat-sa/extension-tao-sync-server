@@ -44,11 +44,11 @@ class ProctorTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->ontologyMock = $this->getMock(Ontology::class);
+        $this->ontologyMock = $this->createMock(Ontology::class);
         $this->classMock = $this->getMockBuilder(core_kernel_classes_Class::class)
             ->disableOriginalConstructor()
             ->getMock();

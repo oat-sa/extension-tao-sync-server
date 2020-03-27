@@ -34,7 +34,7 @@ class TestTakerTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->service = (new TestTaker())->setServiceLocator(
