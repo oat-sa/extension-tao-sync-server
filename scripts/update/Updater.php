@@ -49,6 +49,9 @@ use oat\taoSyncServer\listener\DeliveryListener;
 use oat\taoTestCenter\model\TestCenterService;
 use oat\taoTestTaker\models\TestTakerService;
 
+/**
+ * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
+ */
 class Updater extends \common_ext_ExtensionUpdater
 {
     public function update($initialVersion)
@@ -161,5 +164,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('0.3.0');
         }
         $this->skip('0.3.0','0.4.0');
+        
+        //Updater files are deprecated. Please use migrations.
+        //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
+
+        $this->setVersion($this->getExtension()->getManifest()->getVersion());
     }
 }
